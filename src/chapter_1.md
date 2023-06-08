@@ -35,3 +35,59 @@ In page 18, on the paragraph about probability densities, author states that und
 > where \\(J_g\\) is the Jacobian of \\(g\\). 
 
 A consequence of this observation is that the maximum of a probability density is dependent on the choice of variable.
+
+
+
+## Exercises 
+
+
+### Solution to exercise 1.1
+
+
+
+Given 
+
+\\[
+E(\bar w) = \frac12 \sum_{n=1}^N \left( 
+x_n^M w_M + \dots + x_n w_1 + w_0 - t_n 
+\right)^2
+\\]
+
+Compute the partial derivative
+
+\\[
+\frac{\partial E}{\partial w_i} = 
+\sum_{n=1}^N x_n^i \left(
+x_n^M w_M + \dots + x_n w_1 + w_0 - t_n 
+\right)
+\\]
+
+Set the partial derivatives to zero to get $w$ that minimizes \\(E\\)
+
+\\[
+\frac{\partial E}{\partial w_i} = 
+\sum_{n=1}^N x_n^i \left(
+x_n^M w_M + \dots + x_n w_1 + w_0 - t_n 
+\right) = 0
+\\]
+
+\\[
+= \sum_{n=1}^N
+x_n^{M+i} w_M + \dots + x_n^{1+i} w_1 + x_n^{0 + i}w_0 - x_n^{i} t_n = 0 
+\\]
+
+\\[
+= \sum_{n=1}^N
+x_n^{M+i} w_M + \dots + x_n^{1+i} w_1 + x_n^{0 + i}w_0 = \sum_{n=1}^N x_n^{i} t_n
+\\]
+
+\\[
+= w_M \sum_{n=1}^N x_n^{M+i} + \dots + w_j \sum_{n=1}^N x_n^{j+i} + \dots +
+ w_0 \sum_{n=1}^N x_n^{0 + i} = \sum_{n=1}^N x_n^{i} t_n
+\\]
+
+\\[
+= A_{iM} w_M + \dots + A_{ij} w_j + \dots + A_{i0} w_0  = T_i 
+\\]
+
+\\[ = \sum_{j=1}^M A_{ij}w_j = T_i \\]
