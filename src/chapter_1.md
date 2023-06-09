@@ -215,3 +215,31 @@ where
 or simply 
 
 \\[ \hat A = \lambda I_M + A \\]
+
+### Solution to exercise 1.3
+
+The probability of selecting an apple is
+
+\\[
+\begin{split}
+P(a) &= P(a, r) + P(a, b) + P(a, g) \\\\
+&= P(a \mid r)P(r) + P(a \mid b)P(b) + P(a \mid g)P(g) \\\\
+&= 3/10 \times 0.2 + \frac12 \times 0.2 + 3/10 \times 0.6 = 0.34
+\end{split}
+\\]
+
+Following the Bayes theorem, the probability of the selected box being green given that the selected fruit is an orange is
+
+\\[
+P(g \mid o) = \frac{P(o \mid g) P(g)}{P(o)} = \frac{0.3 \times 0.6}{0.36} = 0.5
+\\]
+
+where 
+
+\\[
+\begin{split}
+P(o) &= P(o, r) + P(o, b) + P(o, g) \\\\
+&= P(o \mid r)P(r) + P(o \mid b)P(b) + P(o \mid g)P(g) \\\\
+&= 4/10 \times 0.2 + \frac12 \times 0.2 + 3/10 \times 0.6 = 0.36 
+\end{split}
+\\]
