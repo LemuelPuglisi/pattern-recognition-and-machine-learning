@@ -37,6 +37,68 @@ In page 18, on the paragraph about probability densities, author states that und
 A consequence of this observation is that the maximum of a probability density is dependent on the choice of variable.
 
 
+## Bayesian curve fitting
+
+Let's revise the polynomial curve fitting example to also estimate uncertainty. We suppose that each prediction is normally distributed with the mean centered at the prediction, and the variance \\(\beta^{-1}\\) estimated along with the polynomial weights \\(\bar w\\):
+\\[
+p(t \mid x, \bar w, \beta) = \mathcal N (t \mid y(x, \bar w), \beta^{-1})
+\\]
+Supposing that the \\(N\\) points from the dataset \\(\langle X, T \rangle\\) are drawn independently, the likelihood function of a prediction is given by:
+\\[
+p(T \mid X, \bar w, \beta) = \prod_{n=1}^N \mathcal N (t_n \mid y(x_n, \bar w), \beta^{-1})
+\\]
+It is simpler and numerically convenient to work with the log-likelihood:
+\\[
+\ln p(T \mid X, \bar w, \beta) =
+-\frac{\beta}2 \sum_{n=1}^N (y(x_n, \bar w) - t_n)^2 +
+\frac{N}2\ln \beta - \frac{N}2\ln(2\pi)
+\\]
+We should find \\((\bar w, \beta)\\) (\\(\beta\\) is the precision, inverse of variance) which maximize the likelihood. If we consider first the parameters \\(\bar w\\), then the maximization problem can drop the last 2 terms since they do not depend on \\(\bar w\\), which is the same as minimizing the sum of squares error loss.
+
+Once found \\(\bar w_{ML}\\), we can find \\(\beta\\) as
+\\[
+\frac{1}{\beta_{ML}} = \frac1N \sum_{n=1}^N (y(x_n, \bar w) - t_n)^2
+\\]
+By using \\(\bar w\\) and \\(\beta\\), instead of providing a single prediction, we can provide a full distribution \\(p(t \mid x, \bar w_{ML}, \beta_{ML})\\) over the values of \\(t\\) for each \\(x\\). 
+
+
+
+Let \\(p(\bar w \mid \alpha)\\) be the prior distribution over the weights \\(\bar w\\), for simplicity:
+\\[
+p(\bar w \mid \alpha) = \mathcal N(\bar w \mid \bar 0, \alpha^{-1} I)
+\\]
+Where the hyperparameter \\(\alpha\\) is the precision of the distribution. Using the Bayes theorem, the posterior distribution \\(p(\bar w \mid X, T, \alpha, \beta)\\) is proportional to the product of the likelihood and the prior:
+\\[
+p(\bar w \mid X, T, \alpha, \beta) \propto p(T \mid X, \bar w, \beta) p(\bar w \mid \alpha)
+\\]
+By now we can find the most probable weights \\(\bar w\\) by maximizing the posterior distribution. This approach is called MAP (MAximum Posterior). We find that maximizing the posterior defined previously is the same as minimizing
+\\[
+\frac{\beta}{2}\sum_{n=1}^N (y(x_n, \bar w) - t_n)^2 + \frac\alpha2\bar w^T \bar w
+\\]
+ So maximizing the posterior is the same as minimizing the **regularized** sum of squares error loss function, where the regularization parameter is \\(\lambda = \frac\alpha\beta\\).
+
+For a fully Bayesian treatment, we should evaluate \\(p(t \mid x, X, T)\\). This requires to integrate over all the possible \\(\bar w\\). By using the product and sum rules, we can write:
+\\[
+p(t \mid x, X, T) = \int p(t \mid x, \bar w, \beta) 
+p(\bar w \mid X, T, \alpha, \beta)  d\bar w
+\\]
+Which can be solved analytically, finding that:
+\\[
+p(t \mid x, X, T) = \mathcal N (t \mid m(x), s^2(x))
+\\]
+where 
+\\[
+m(x) = \beta \phi(x)^T S \sum_{n=1}^N \phi(x_n) t_n
+\\]
+and 
+\\[
+s^2(x) = \beta^{-1} + \phi(x)^T S \phi(x)
+\\]
+and 
+\\[
+S^{-1} = \alpha I + \beta \sum_{n=1}^N \phi(x_n) \phi(x_n)^T
+\\]
+where \\(\phi(x) = \langle 1, x, x^2, \dots, x^M\rangle\\). 
 
 ## Exercises 
 
