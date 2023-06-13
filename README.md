@@ -6,6 +6,17 @@
 <h4 align="center">Study notes from <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">Bishop's book</a></h4>
 
 
+## Requirements
+
++ mdbook
++ mdbook-katex
+
+> Put cargo bin folder in PATH to make mdbook-katex work properly 
+> ```bash
+> # Cargo
+> export CARGOBINPATH=$HOME/.cargo/bin/
+> export PATH=${CARGOBINPATH}:$PATH
+>```
 
 ## Tracking progress
 

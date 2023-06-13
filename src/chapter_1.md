@@ -99,3 +99,121 @@ and
 S^{-1} = \alpha I + \beta \sum_{n=1}^N \phi(x_n) \phi(x_n)^T
 \\]
 where \\(\phi(x) = \langle 1, x, x^2, \dots, x^M\rangle\\). 
+
+ ## Decision theory
+
+Probability theory is useful to quantify uncertainty, while decision theory allows to make optimal decisions in situations involving uncertainty.
+
+
+
+### Medical diagnosis example
+
+Consider a medical diagnosis problem in which we have taken an X-ray image of a patient. Our algorithm has to predict if the patient has cancer or not. The input vector $\bar x$ is the set of pixel intensities, while the output variable $t$ is binary ($C_1=0$ no cancer, $C_2=1$ cancer). 
+
+The **general inference problem** involves determining the joint distribution $p(\bar x, t)$. Given it, we then must **decide** to give treatments to the patient or not, and we would like this choice to be optimal. This is called the **decision step**.
+
+If our goal is to make as few misclassifications as possible, then it is sufficient to study the posterior probability $p(C_k \mid \bar x)$. Assigning each observation to a class means dividing the input space in different **decision regions** $R_k$ ($k=1, 2$) where the boundaries are called **decision boundaries / surfaces**. Regions are not constrained to be contiguous but can be comprised of different disjoint sub-regions. 
+
+Given our decision regions, the probability of making a mistake is quantified by:
+\\[
+\begin{split}
+p(\text{mistake}) &= p(\bar x \in R_1, C_2) + p(\bar x \in R_2, C_1) \\\\
+&= \int_{R_1} p(\bar x, C_2) d\bar x +  \int_{R_2} p(\bar x, C_1) d \bar x \\\\
+&= \int_{R_1} p(C_2 \mid \bar x)p(\bar x) d\bar x +  \int_{R_2} p(C_1\mid \bar x)p(\bar x) d \bar x
+\end{split}
+\\]
+Since the prior $p(\bar x)$ is common in both terms, we can say that the minimum probability of making a mistake is given if each observation $\bar x$ is assigned to the class $C_k$ for which the posterior probability $p(C_k \mid \bar x)$ is the largest.
+
+
+
+> For the case of $K$ classes, is easier to maximize the probability of being correct:
+> $$
+> p(\text{correct}) = \sum_{k=1}^K p(\bar x \in R_k, C_k) = \sum_{k=1}^K \int_{R_k}p(\bar x, C_k)d\bar x = \sum_{k=1}^K \int_{R_k}p(C_k \mid \bar x)p(\bar x)d\bar x
+> $$
+> The maximum probability is obtained when each observation is assigned to the class with highest posterior.
+
+
+
+### Minimizing the expected loss
+
+In our example, we have two different misclassification:
+
++ A healthy patient being classified as having cancer (which is bad)
++ A patient with cancer being classified as healthy (which is worse due to late treatments)
+
+We can formalize the severity of each misclassification by constructing a **loss function** (or cost function) which is a single measure of loss incurred in taking any of the available decisions or actions. Let's construct a **loss matrix** $L$:
+$$
+L = \begin{bmatrix}
+0 & 1\\
+1000 & 0 \\
+\end{bmatrix}
+$$
+Where $L_{ij}$ indicates the loss severity of classifying an observation of class $i$ with class $j$. The diagonal indicates correct classifications, $L_{21}=1000$ is the loss of classifying a patient with cancer ($C_2$) to be healthy ($C_1$), vice versa for $L_{12}=1$.   
+
+The optimal solution is the one which minimizes the average loss function:
+$$
+\mathbb{E}[L] = \sum_{k}\sum_{j}\int_{R_j} L_{kj} p(\bar x, C_k) d\bar x
+$$
+Our goal is to choose the regions $R_j$ to minimize the expected loss, which can be formulated with priors instead of the joint probability. Again, the decision rule which minimize the loss is the one that assigns each observation to the class with highest posterior.
+
+If the posterior is too low or comparable with the other posteriors, our classification has higher uncertainty of being true. We can use a threshold $\theta$ such that if $p(C_k \mid \bar x) \le \theta$ then we avoid making a decision. This is known as the **reject option**.
+
+
+
+### Inference and decision
+
+The classification is now broken in two stages:
+
++ Inference stage, where we learn the model $p(C_k \mid \bar x)$
++ Decision stage, where we use posteriors to make optimal assignments 
+
+We can identify also 3 approaches to solve the decision stage:
+
+1. **Generative models**. Model the joint distribution $p(\bar x, C_k)$, obtain posteriors, make decisions based on posteriors. The joint distribution is useful to simulate samples from the modeled population and for outliers / novelty detection.
+2. **Discriminative models**. Determine only the posterior class probabilities and assign each observation to the class with highest posterior accordingly. 
+3. **Discriminative functions**. Model a function $f(\bar x) = C_k$ directly, where probabilities play no role. 
+
+The benefits of computing the posterior probabilities (avoiding approach n.3) are:
+
++ We can modify the loss matrix without re-training the model (minimizing risk)
++ We can use the reject option
++ When balancing the dataset, we can compensate for class priors (**A**)
++ We can combine models (**B**)
+
+>(**A**) Suppose we have 1000 samples from class $C_1$ and 100 samples from class $C_2$, so the real priors are $p(C_1) = 0.91$ and $p(C_2) =  0.09$. Suppose we want to balance our datasets to 100 samples for each class. We know the real priors and hence we can replace them when using the Bayes theorem.
+>
+>(**B**) Suppose we have X-ray data $\bar x_I$ and blood test data $\bar x_B$, we can develop two models (one for each) and assume that the distributions of the inputs are independent given the class (conditional independence)
+>$$
+>p(\bar x_I, \bar x_B \mid C_k) = p(\bar x_I \mid C_k) p(\bar x_B \mid C_k)
+>$$
+>The posterior is then
+>$$
+>\begin{split}
+>P(C_k \mid \bar x_I \bar x_B) &\propto p(\bar x_I, \bar x_B \mid C_k) p(C_k)\\
+>&\propto p(\bar x_I \mid C_k) p(\bar x_B \mid C_k)p(C_k) \\
+>&\propto \frac{p(C_k \mid \bar x_I)p(C_k \mid \bar x_B)}{p(C_k)}
+>\end{split}
+>$$
+>Hence the combination of 2+ models is trivial.
+
+
+
+### Loss functions for regression
+
+The decision stage for regression problems consists of choosing a specific estimate $ y(x) $ of the value $t$ for each input $x$. In doing so, we incur a loss $L(t, y(x))$. The expected loss is then given by:
+
+$$
+\mathbb{E}[L]= \int\int L(t, y(x)) p(x, t) dx dt
+$$
+
+A common choice of loss is the squared loss
+
+$$
+\mathbb{E}[L]= \int\int \{y(x) - t\}^2 p(x, t) dx dt
+$$
+
+Supposing that $y$ is a flexible function, this can be solved by using the calculus of variations, obtaining the following regression function
+
+$$
+y(x) = \int t \cdot p(t \mid x) dt = \mathbb{E}_t [t \mid x]
+$$
