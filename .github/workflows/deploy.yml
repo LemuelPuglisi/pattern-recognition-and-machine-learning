@@ -23,7 +23,7 @@ jobs:
         echo `pwd`/mdbook >> $GITHUB_PATH
     - name: Install mdbook-katex
       run: |
-        apt install cargo
+        sudo apt install cargo
         cargo install mdbook-katex
         echo "export CARGOBINPATH=$HOME/.cargo/bin/" >> ~/.bashrc
         echo "export PATH=${CARGOBINPATH}:$PATH" >> ~/.bashrc
