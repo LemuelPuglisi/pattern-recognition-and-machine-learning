@@ -138,3 +138,36 @@ P(o) &= P(o, r) + P(o, b) + P(o, g) \\\\
 &= 4/10 \times 0.2 + \frac12 \times 0.2 + 3/10 \times 0.6 = 0.36 
 \end{split}
 \\]
+
+### Solution to exercise 1.4
+
+Revised solution from Bishop's solution manual.
+
+Let $g$ be a non-linear change of variable $x = g(y)$, for probability density functions we know that 
+$$
+p_y(y) = p_x(g(y)) \cdot |g'(y)|
+$$
+Let $\hat x, \hat y$ be the maximum of $p_x, p_y$ densities respectively. Let $s = \text{sign}(g'(y)) \in \{-1, 1\}$ and re-write:
+$$
+p_y(y) = p_x(g(y)) \cdot sg'(y)
+$$
+Differentiate both sides:
+$$
+p'(y) = s p'_x(g(y)) [g'(y)]^2 + sp_x(g(y))g''(y)
+$$
+Suppose that $\hat x = g(\hat y)$, then 
+$$
+\begin{split}
+p'(\hat y) &= s p'_x(g(\hat y)) [g'(\hat y)]^2 + sp_x(g(\hat y))g''(\hat y)\\
+&= s p'_x(\hat x) [g'(\hat y)]^2 +  sp_x(\hat x)g''(\hat y) \\
+&= s \cdot 0 \cdot [g'(\hat y)]^2 +  sp_x(\hat x)g''(\hat y) \\
+&= sp_x(\hat x)g''(\hat y) = 0 \\
+
+\end{split}
+$$
+Where:
+
+1. $s \in \{-1, 1\}$ cannot be zero
+2. $p_x(\hat x)$ is the maximum probability, thus cannot be zero
+
+This means $\frac{\partial^2 g(\hat y)}{\partial y^2}$ has to be 0, which depends on $g$, hence the relation $\hat x = g(\hat y)$ may not hold. If $g$ is linear, then the second derivative of $g$ is 0 and the relation $\hat x = g(\hat y)$ is valid.
