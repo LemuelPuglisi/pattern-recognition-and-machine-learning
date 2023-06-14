@@ -217,3 +217,29 @@ Supposing that $y$ is a flexible function, this can be solved by using the calcu
 $$
 y(x) = \int t \cdot p(t \mid x) dt = \mathbb{E}_t [t \mid x]
 $$
+
+## Notes on Information theory section
+
+Let $p$ and $q$ be the exact and an approximate distributions of the random variable $x$. The KL divergence defines the additional amount of information (in nats for $\ln$ bits for $\log_2$) required to transmit $x$ assuming its distribution is $q$ (approximated) instead of $p$ (exact). The mathematical definition is:
+
+$$
+KL(p || q) = H(p || q) - H(p) = -\int p(x) \ln \frac{q(x)}{p(x)} dx
+$$
+
+From the Jensen Inequality, we know that for a convex function $f$
+
+$$
+f(\mathbb{E}[x]) \le \mathbb{E}(f(x))
+$$
+
+Since $-\ln$ is a strictly convex function, we can apply the Jensen Inequality to the KL divergence:
+
+$$
+\begin{split}
+KL(p || q) &= -\int p(x) \ln \frac{q(x)}{p(x)} dx \\
+& \ge -\ln \int p(x) \frac{q(x)}{p(x)} dx \\
+& \ge -\ln \int q(x) dx  = - \ln 1 = 0\\
+\end{split}
+$$
+
+proceed from here...
