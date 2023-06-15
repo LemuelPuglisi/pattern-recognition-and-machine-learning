@@ -171,3 +171,61 @@ Where:
 2. $p_x(\hat x)$ is the maximum probability, thus cannot be zero
 
 This means $\frac{\partial^2 g(\hat y)}{\partial y^2}$ has to be 0, which depends on $g$, hence the relation $\hat x = g(\hat y)$ may not hold. If $g$ is linear, then the second derivative of $g$ is 0 and the relation $\hat x = g(\hat y)$ is valid.
+
+### Solution to exercise 1.5
+
+$$
+\begin{split}
+var[X] &= \int p(x) \bigg[ f(x) - \mathbb{E}[f(x)] \bigg]^2 dx \\
+&= \int p(x) \bigg[  f(x)^2 -2 \mathbb{E}[f(x)] f(x) + \mathbb{E}[f(x)]^2 \bigg]dx\\
+&= \int (p(x)f(x)^2 - 2p(x)\mathbb{E}[f(x)] f(x) + p(x)\mathbb{E}[f(x)]^2) dx\\
+&= \int p(x)f(x)^2 dx - 2\int p(x)\mathbb{E}[f(x)]f(x)dx + \int p(x)\mathbb{E}[f(x)]^2 dx\\
+&= \mathbb{E}[f(x)^2] - 2\mathbb{E}[f(x)] \int p(x)f(x)dx + \mathbb{E}[f(x)]^2 \int p(x)dx \\
+&= \mathbb{E}[f(x)^2] - 2\mathbb{E}[f(x)]^2 + \mathbb{E}[f(x)]^2 \\
+&= \mathbb{E}[f(x)^2] - \mathbb{E}[f(x)]^2
+\end{split}
+$$
+
+### Solution to exercise 1.6
+
+From 1.41
+
+$$
+cov(x,y) = \mathbb{E}_{x,y}[xy] - \mathbb E[x]\mathbb E[y]
+$$
+
+But if x and y are indipendent, then
+
+$$
+\begin{split}
+\mathbb{E}_{x,y}[xy] &= \int\int p(x,y)xy\space dxdy \\
+&=  \int\int xp(x)\space yp(y) \space dxdy \\
+&= \mathbb{E}[x] \int \space y p(y) dy \\
+&= \mathbb{E}[x]\mathbb{E}[y]
+\end{split}
+$$
+
+Therefore $cov(x,y)=0$.
+
+### Solution to exercise 1.32
+
+Let $x \sim p_x(x)$ and let $y = Ax$ be a linear change of variable. In that case, the jacobian factor is the determinant $|A|$ and we can write
+
+$$
+p_y(y) = p_x(y) |A|
+$$
+
+So we can write
+
+$$
+\begin{split}
+H(y) &= - \int p_y(y) \ln p_y(y) dy \\
+&= - \int p_y(y) \ln [p_x(y) |A|] dy \\
+&= -\int p_y(y)\left[ \ln p_x(y) + \ln |A| \right] dy \\
+&= \bigg[-\int p_y(y)\ln p_x(y) dy \bigg] - \ln |A|\int p_y(y)dy \\
+&= \bigg[-\int p_y(y)\ln p_x(y) dy \bigg] - \ln |A|
+\end{split}
+$$
+
+(last steps: solve the integral on the left-hand side using the substitution $A^{-1}y=x$ remembering that A is non-singular)
+

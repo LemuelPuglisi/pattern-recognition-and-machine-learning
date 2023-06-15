@@ -22,7 +22,7 @@
 
 | Chapter                             | Read | Exercises |
 | ----------------------------------- | ---- | --------- |
-| 1. Introduction                     |  ✅  |   4/41    |
+| 1. Introduction                     |  ✅  |   7/41    |
 | 2. Probability Distributions        |      |           |
 | 3. Linear Models for Regression     |      |           |
 | 4. Linear Models for Classification |      |           |
