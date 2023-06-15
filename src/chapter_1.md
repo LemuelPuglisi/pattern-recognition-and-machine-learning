@@ -220,6 +220,7 @@ $$
 
 ## Notes on Information theory section
 
+### KL divergence and Jensen Inequality
 Let $p$ and $q$ be the exact and an approximate distributions of the random variable $x$. The KL divergence defines the additional amount of information (in nats for $\ln$ bits for $\log_2$) required to transmit $x$ assuming its distribution is $q$ (approximated) instead of $p$ (exact). The mathematical definition is:
 
 $$
@@ -242,4 +243,47 @@ KL(p || q) &= -\int p(x) \ln \frac{q(x)}{p(x)} dx \\
 \end{split}
 $$
 
-proceed from here...
+Since the function $-ln$ is strictly convex, the equality $KL(p || q) = 0$ holds if and only if $q(x) = p(x)$ for all values of $x$.
+
+### Minimizing KL = Maximizing likelihood
+Suppose we want to approximate an unknown distribution $p(x)$ using a parametric distribution $q(x\mid \theta)$. Suppose we have $N$ training points drawn from the distribution $p(x)$, we can approximate the KL divergence as:
+
+$$
+KL(p || q) \approx \sum_{n=1}^N \left[
+    -\ln q(x_n \mid \theta) + \ln p(x_n)
+\right]
+$$
+
+To find the best values of $\theta$ to approximate $p$, we can minimize the approximated KL divergence:
+
+$$
+\begin{split}
+\min_\theta KL(p || q) &\approx \min_\theta \sum_{n=1}^N \left[ -\ln q(x_n \mid \theta) + \ln p(x_n) \right] \\
+&= \min_\theta -\sum_{n=1}^N \ln q(x_n \mid \theta)\\
+&= \max_\theta \sum_{n=1}^N \ln q(x_n \mid \theta)\\
+&=\max_\theta \sum_{n=1}^N q(x_n \mid \theta)
+\end{split}
+$$
+
+Therefore, minimizing the KL divergence is the same as maximizing the likelihood.
+
+### Mutual information
+
+Let $x, y$ be two random variables. We don't know if they are indipendent or not, but if they are then
+
+$$ p(x,y) = p(x)p(y) $$
+
+To check if they are indipendent we can calculate the KL divergence between $p(x,y)$ and $p(x)p(y)$. Given the properties of the KL divergence, if $KL=0$ then $p(x,y) = p(x)p(y)$. This quantity is called **mutual information** between the variables $x,y$ 
+
+$$
+I[x, y] = KL(p(x,y) || p(x)p(y)) = 
+-\int\int p(x,y) \ln \frac{p(x)p(y)}{p(x,y)}dxdy 
+$$
+
+It is related to the conditional entropy through:
+
+$$
+I[x,y] = H[x] - H[x\mid y] = H[y] - H[y \mid x]
+$$
+
+The mutual information $I[x,y]$ represents the reduction in uncertainty about $x$ as a consequence of the new observation $y$ (or vice versa). 
