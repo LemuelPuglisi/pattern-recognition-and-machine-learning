@@ -52,3 +52,18 @@ $$
 var[m] = N\mu(1-\mu)
 $$
 
+## Beta distribution
+
+Please read the [`estimating_parameters_using_a_bayesian_approach`]([Title](https://github.com/LemuelPuglisi/pattern-recognition-and-machine-learning/blob/main/notebooks/ch2/estimating_parameters_using_a_bayesian_approach.ipynb)) notebook. Some quick notes here:
+
+$$
+\beta(\mu) = \frac{\Gamma(a+b)}{\Gamma(a) + \Gamma(b)} \mu^{(a-1)}(1-\mu)^{(b-1)}
+$$
+
+and 
+
+$$
+\mathbb E[\mu] = \frac{a}{a+b} \hspace{1cm}
+var[\mu] = \frac{ab}{(a+b)^2(a+b+1)}
+$$
+
