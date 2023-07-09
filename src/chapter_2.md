@@ -4,6 +4,8 @@ This chapter will focus on the problem of density estimation, which consists in 
 
 ## Bernoulli experiment
 
+Suppose we have a data set $D = \{x_1, \dots, x_N \}$ of i.i.d. observed values of $x \sim Bern(x \mid \mu)$. We can estimate the $\mu$ parameter from the sample in a frequentist way, by maximizing the likelihood (or the log-likelihood): 
+
 $$
 \begin{split}
 \ln p(D \mid \mu) &= \ln \prod_{n=1}^N p(x_i \mid \mu) \\
@@ -12,6 +14,7 @@ $$
 \end{split} 
 $$
 
+To find $\mu$, let's set the log-likelihood derivative w.r.t. $\mu$ to 0:
 
 $$
 \begin{split}
@@ -31,3 +34,5 @@ $$
 \frac1N \sum_{n=1}^N x_n &= \mu
 \end{split}
 $$
+
+$\mu$ is estimated from the sample mean. In this case, the sample mean is an example of sufficient statistic for the model, i.e. calculating other statistics from the sample will not add more information than that.
