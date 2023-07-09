@@ -36,3 +36,19 @@ $$
 $$
 
 $\mu$ is estimated from the sample mean. In this case, the sample mean is an example of sufficient statistic for the model, i.e. calculating other statistics from the sample will not add more information than that.
+
+## Binomial distribution
+
+Sticking with the coin flips example, the binomial distribution models the probability of obtaining $m$ heads out of $N$ total coin flips:
+
+$$
+Bin(m \mid N, \mu) = \binom{N}{m} \mu^m (1 - \mu)^{N - m}
+$$
+
+Where $\binom{N}{m}$ represents all the possible ways of obtaining $m$ heads out of $N$ coin flips. The mean and variance of a binomial variabile can be estimated by knowning that for i.i.d events the mean of the sum is the sum of the mean, and the variance of the sum is the sum of the variances. Because $m = x_1 + \dots + x_N$ then:
+
+$$
+\mathbb E[m] = N \mu \hspace{1cm}
+var[m] = N\mu(1-\mu)
+$$
+
