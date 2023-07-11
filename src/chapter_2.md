@@ -67,3 +67,53 @@ $$
 var[\mu] = \frac{ab}{(a+b)^2(a+b+1)}
 $$
 
+## Multinomial variables
+
+It's a generalization of the Bernoulli distribution where a random variable has $K$ possible values instead of being binary. We can represent the variable as a $K$-dimensional binary vector $x = \langle x_1, x_2, \dots, x_K \rangle$ where only one component can be asserted:
+
+$$
+\sum_{k=1}^K x_k = 1
+$$
+
+The probability of each component to be asserted is regulated by a probability vector $\mu = \langle \mu_1, \mu_2, \dots, \mu_K \rangle$, so that basically $x_k \sim Bern(\mu_k)$. Since the $\mu$ vector represents a probability distribution, then:
+
+$$
+\sum_{k=1}^K \mu_k = 1
+$$
+
+The multinomial distribution of $x$ is given by:
+
+$$
+p(x \mid \mu) = \prod_{k=1}^K \mu_k^{x_k}
+$$
+
+And the expected values is $\mathbb{E}[x \mid \mu] = \mu$. Let's consider a dataset of N independente observations, then the likelihood function is:
+
+$$
+p(D \mid \mu) = \prod_{n=1}^N \prod_{k=1}^K \mu_k^{x_{nk}} = 
+\prod_{k=1}^K \mu_k^{(\sum_{n=1}^N x_{nk})} = 
+\prod_{k=1}^K \mu_k^{m_k}
+$$
+
+where $m_k = \sum_{n=1}^N x_{nk}$. 
+
+If we want to find $\mu$ from $D$ by maximizing the (log) likelihood, we have to constrain that to be a probability distribution and therefore we can use the Lagrangian multiplier $\lambda$
+
+$$
+\sum_{k=1}^K m_k \ln \mu_k + \lambda\left(\sum_{k=1}^K \mu_k - 1 \right)
+$$
+
+Setting the derivative w.r.t. $\mu_k$ to zero we get $\mu_k = -m_k/\lambda$. We can solve for the Lagrangian multiplier $\lambda$ by replacing this result in the equation and then we get that $\lambda = -N$ and $\mu_k^{ML} = m_k / N$. 
+
+We can also consider the distribution of the quantities $m_1, \dots, m_k$ (**Multinomial distribution**) conditioned on the parameter $\mu$ and on the number $N$ of observations:
+
+$$
+Mult(m_1, dots, m_K \mid \mu, N) = \binom{N}{m_1m_2\dots m_K} \prod_{k=1}^K \mu_k^{m_k}
+$$
+
+where 
+
+$$
+\binom{N}{m_1m_2\dots m_K} = \frac{N!}{m_1!m_2!\dots m_K!} \hspace{1cm}
+\sum_{k=1}^K m_k = N
+$$
