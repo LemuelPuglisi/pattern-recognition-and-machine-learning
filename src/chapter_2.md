@@ -137,3 +137,48 @@ $$
 p(\mu \mid D, \alpha) = \frac{\Gamma(\alpha_0 + N)}{\Gamma(\alpha_1 + m_1)\dots\Gamma(\alpha_K + m_k)} \prod_{k=1}^K \mu_k^{\alpha_k + m_k - 1}
 $$
 
+## Gaussian distribution
+
+Univariate Gaussian distribution:
+
+$$
+\mathcal{N}(x \mid \mu, \sigma^2) = \frac{1}{(2\pi\sigma^2)^{1/2}}
+\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+$$
+
+Where $\mu$ and $\sigma^2$ are the mean and variance of the population.
+
+Multivariate Gaussian distribution:
+
+$$
+\mathcal{N}(\bar x \mid \bar\mu, \Sigma) = 
+\frac{1}{(2\pi)^{D/2} |\Sigma|^{1/2}}
+\exp\left(
+    -\frac{ (\bar x - \bar\mu)^T \Sigma^{-1} (\bar x - \bar\mu) }{2}\right)
+$$
+
+Where $D$ is the dimensionality of $\bar x$, $\mu$ is the mean vector and $\Sigma$ is the covariance matrix.
+
+**Central Limit Theorem**. Subject to certain mild conditions, the sum of a set of random variables, which is of course itself a random variable, has a distribution that becomes increasingly Gaussian as the number of terms in the sum increases.
+
+**Observation n.1** - The covariance matrix $\Sigma$ is always positive semi-definite. This means that the eigenvalues are non-negative.
+
+**Observation n.2** - To be well-defined, a Gaussian must have a positive *definite* covariance matrix, which means that all the eigenvalues are strictly positive. If the covariance matrix has one or more null eigenvalues (positive *semi*-definite), then the distribution is singular and is confined to a *subspace of lower dimensionality*. 
+
+**Observation n.3** - Given a 2D Gaussian distribution, we find that elements $x$ with constant density are distributed as ellipses, where the axis of the ellipse is given by the eigenvectors, and the length of the axis is proportional to the square root of the corresponding eigenvalue. The ellipse defined by the axis having a length equal to the square root of the eigenvalues, we find all the elements with a density of $\exp(-1/2)$. 
+
+> This is a hint on my preferred interpretation of eigenvectors and eigenvalues calculated from data: eigenvectors represent that capture most of the variability, and the corresponding eigenvalues are an indicator of the variability on that axis (see PCA).
+
+![2D gaussian](assets_ch2/2dgaussian.png)
+
+**Observation n.4** - A multivariate Gaussian can be decomposed as a product of multiple univariate Gaussians.
+
+**Observation n.5** - The book provides a formal proof to find that $\mathbb{E}[\bar x] = \bar \mu$ and $\text{var}[\bar x] = \Sigma$. 
+
+**Observation n.6** - A general symmetric covariance matrix $\Sigma$ has $D(D+1)/2$ independent parameters, and there are another $D$ independent parameters in $\mu$, giving $D(D+3)/2$ parameters in total. This means that the number of parameters grows quadratically with the dimension $D$.
+
+> One way to reduce the number of parameters is to use restricted forms of the covariance matrix. For example, with a diagonal covariance matrix (figure b) we a linear dependency between parameters and dimensionality, but we explain the variability only from the features axis. Another possibility is to use the **isotropic covariance** (Figure c) $\sigma^2 I$ where we have only one parameter, but we discard the variability along multiple axis. We have a trade-off between model complexity and flexibility that must be adressed based on the application.
+
+![Alt text](assets_ch2/gaussian_parameters.png)
+
+**Limitations of the Gaussian** - Gaussian is unimodal (only 1 maximum) and thus is not good at representing multimodal data.
