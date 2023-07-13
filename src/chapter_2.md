@@ -182,3 +182,107 @@ Where $D$ is the dimensionality of $\bar x$, $\mu$ is the mean vector and $\Sigm
 ![Alt text](assets_ch2/gaussian_parameters.png)
 
 **Limitations of the Gaussian** - Gaussian is unimodal (only 1 maximum) and thus is not good at representing multimodal data.
+
+
+### Conditional & Marginal Gaussian Distributions
+
+Given a joint Gaussian distribution $\mathcal{N}(x \mid \mu, \Sigma$ with $\Lambda = \Sigma^{-1}$ (precision matrix) and
+
+$$
+x = \begin{bmatrix} x_a \\ x_b \end{bmatrix} \hspace{1cm}
+\mu = \begin{bmatrix} \mu_a \\ \mu_b \end{bmatrix} 
+$$
+
+$$
+\Sigma = \begin{bmatrix}
+\Sigma_{aa} & \Sigma_{ab} \\
+\Sigma_{ba} & \Sigma_{bb} \\
+\end{bmatrix}
+\hspace{1cm}
+\Lambda = \begin{bmatrix}
+\Lambda_{aa} & \Lambda_{ab} \\
+\Lambda_{ba} & \Lambda_{bb} \\
+\end{bmatrix}
+$$
+
+where $\Sigma_{ab} = \Sigma_{ba}^T$ and $\Lambda_{ab} = \Lambda_{ba}^T$. 
+
+Then we have that the conditional distribution $p(x_a \mid x_b)$ is
+
+$$
+\begin{split}
+p(x_a \mid x_b) &= \mathcal N(\mu_{a \mid b}, \Lambda_{aa}^{-1}) \\
+\mu_{a \mid b} &= \mu_a + \Sigma_{ab}\Sigma_{bb}^{-1}(x_b - \mu_b)
+\end{split}
+$$
+
+> Note that $\mu_{a\mid b}$ is a linear function of $x_b$.
+
+where 
+
+$$
+\Lambda_{aa}^{-1} = \Sigma_{aa} - \Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba}
+$$
+
+And that the marginal distribution $p(x_a)$:
+
+$$
+p(x_a) = \mathcal N (x_a \mid \mu_a, \Sigma_{aa})
+$$
+
+All the derivations focus on the quadratic relationship of the exponential factor to the $x$ and are detailed starting from page 85. The point is that the conditional and marginal distribution of a joint Gaussian distribution are again Gaussian distributions.
+
+Given a marginal Gaussian distribution for $x$ and $y$ and a conditional Gaussian distribution for $y$ given $x$ in the form:
+
+$$
+\begin{split}
+p(x) = \mathcal{N}(x \mid \mu, \Lambda^{-1}) \\
+p(y \mid x) = \mathcal{N}(Ax+b, L^{-1})
+\end{split}
+$$
+
+Where $Ax+b$ expresses the fact that the mean of the conditional distribution $y$ given $x$ is a linear function of $x$, and $L^{-1}$ is another precision matrix. The marginal distribution of $y$ and the conditional distribution of $x$ given $y$ are given by:
+
+$$
+\begin{split}
+p(y) &= \mathcal N (y \mid A\mu + b, L^{-1} + A \Lambda A^T) \\
+p(x \mid y) &= \mathcal N (x \mid \Sigma[A^TL(y-b)+\Lambda\mu], \Sigma) 
+\end{split}
+$$
+
+where 
+
+$$
+\Sigma = (\Lambda + A^TLA)^{-1}
+$$
+
+### Maximum likelihood for the Gaussian
+
+Let $X = (x_1, \dots, x_N)^T$ be a dataset of observation $x_n$ drawn independently from a multivariate Gaussian distribution. We can estimate the parameters by maximizing the log-likelihood:
+
+$$
+p(X \mid \mu, \Sigma) = -\frac{ND}2 \ln(2\pi) - \frac N2 \ln|\Sigma| - \frac12 \sum_{n=1}^N (x_n - \mu)^T \Sigma^{-1}(x_n - \mu)
+$$
+
+By setting the derivative to zero, we can compute:
+
+$$
+\mu_{ML} = \frac1N\sum_{n=1}^N x_n 
+\hspace{1cm}
+\Sigma_{ML} = \frac1N\sum_{n=1}^N(x_n-\mu_{ML})(x_n-\mu_{ML})^T
+$$
+
+Where we calculate the two parameters in sequential steps since there's no dependency on $\Sigma$ when maximizing with respect to $\mu$. By taking the expectation we see that:
+
+$$
+\mathbb E[\mu_{ML}] = \mu \hspace{1cm}
+\mathbb E[\Sigma_{ML}] = \frac{N-1}{N}\Sigma
+$$
+
+We see that $\Sigma_{ML}$ is a biased estimator, and we can correct it by:
+
+$$
+\tilde{\Sigma}_{ML} = \frac1{N-1}\sum_{n=1}^N(x_n-\mu_{ML})(x_n-\mu_{ML})^T
+$$
+
+Now $\mathbb E[\tilde\Sigma_{ML}] =\Sigma$ is a correct extimator for the true covariance.
