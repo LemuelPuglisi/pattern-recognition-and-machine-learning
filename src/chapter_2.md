@@ -286,3 +286,40 @@ $$
 $$
 
 Now $\mathbb E[\tilde\Sigma_{ML}] =\Sigma$ is a correct extimator for the true covariance.
+
+## Student's t distribution
+
+In order to estimate the precision $\tau$ of a Gaussian distribution $\mathcal N(x \mid \mu, \tau^{-1})$ by using a Bayesian approach, we can use the Gamma distribution as a prior:
+$$
+Gam(\tau \mid a, b) = \frac{b^a}{\Gamma(a)} \tau^{a-1} \exp(-b\tau)
+$$
+Then we can marginalize to obtain 
+$$
+p(x \mid \mu, a, b) = \int_0^{\infty} \mathcal N(x \mid \mu, \tau^{-1}) Gam(\tau \mid a, b) d\tau
+$$
+By performing a number of steps, we can say that this is a Student's t distribution:
+$$
+St(x \mid \mu, \lambda, \nu) = \frac{\Gamma(\frac\nu2 +\frac12)}{\frac\nu2} \sqrt{\frac{\lambda}{\pi\nu}} \left[1+\frac{\lambda(x-\mu)^2}{\nu}\right]^{-\frac\nu2 - \frac12}
+$$
+Where $\lambda = a /b$ (precison) and $\nu = 2a$ (degrees of freedom). The precision of the t distribution doesn't correspond to the inverse of the variance! 
+
+The parameters can be estimated by Expectation-Maximization, and the result has the property of **robustness**: outliers does not severely affect the distribution. 
+
+The multivariate version of the t distribution is:
+$$
+St(x \mid \mu, \Lambda, \nu) = 
+\frac{\Gamma(\frac D2 + \frac\nu2)}{\frac\nu2}
+\frac{\sqrt{|\Lambda|}}{(\pi\nu)^{D/2}}
+\left[ 1 + \frac{\Delta^2}{\nu} \right]^{-\frac D2 - \frac \nu2}
+$$
+and 
+$$
+\Delta^2 = (x-\mu)^T\Lambda(x-\mu)
+$$
+The statistics are
+
+$$
+\mathbb{E}[x] = \mu \text{ if } \nu > 1 \\
+cov[x] = \frac{\nu}{\nu-2}\Lambda^{-1} \text{ if } \nu > 2\\
+mode[x] = \mu
+$$
