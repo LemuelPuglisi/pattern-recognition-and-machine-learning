@@ -323,3 +323,20 @@ $$
 cov[x] = \frac{\nu}{\nu-2}\Lambda^{-1} \text{ if } \nu > 2\\
 mode[x] = \mu
 $$
+
+### Exponential family
+
+A distribution that is part of the exponential family can be represented as:
+
+$$
+p(x \mid \eta) = h(x) g(\eta) \exp(\eta^T u(x))
+$$
+
+Where $\eta$ are the **natural parameters** of the distribution. The function $g(\eta)$ ensures that the distribution is normalized:
+
+$$
+g(\eta) \int h(x) \exp(\eta^T u(x)) dx = 1
+$$
+
+The Bernoulli ($\eta=\mu$), Multinomial ($\eta = \langle \mu_1, \dots, \mu_K \rangle$) and Gaussian distributions $(\eta = \langle \mu, \sigma \rangle)$ are part of this family, and the PRML book proofs this at page 113.
+
