@@ -340,3 +340,36 @@ $$
 
 The Bernoulli ($\eta=\mu$), Multinomial ($\eta = \langle \mu_1, \dots, \mu_K \rangle$) and Gaussian distributions $(\eta = \langle \mu, \sigma \rangle)$ are part of this family, and the PRML book proofs this at page 113.
 
+If we want to estimate $\eta$, we can do that by maximum-likelihood. Let's set the gradient of $p(x \mid \eta)$ w.r.t. $\eta$ to 0:
+
+$$
+\nabla \left[ (g(\eta) \int h(x) \exp(\eta^T u(x)) dx \right] = 0 \\
+
+\nabla g(\eta) \underbrace{\int h(x) \exp(\eta^T u(x)) dx}_{\text{(b)}} + g(\eta) \underbrace{\int h(x) \exp(\eta^T u(x)) u(x) dx}_{\text{(a)}} = 0
+$$
+
+>(a) To understand the underlined expression, remember that the integration is w.r.t. $x$, while the differentiation is w.r.t. $\nabla$, so we directly differentiate the content as the derivative of sums is the sum of derivatives. 
+
+> (b) recall that $g(\eta) \int h(x) \exp(\eta^T u(x)) dx = 1$, this means that 
+> $\int h(x) \exp(\eta^T u(x)) dx = 1/g(\eta)$
+
+
+$$
+
+-\frac1{g(\eta)} \nabla g(\eta) =  \int h(x)g(\eta) \exp(\eta^T u(x)) u(x) dx \\
+-\frac1{g(\eta)} \nabla g(\eta) =  \int p(x \mid \eta) u(x) dx \\
+\underbrace{-\frac1{g(\eta)} \nabla g(\eta)}_{\text{(c)}} =  \mathbb{E}[u(x)] \\
+- \nabla \ln g(\eta) =  \mathbb{E}[u(x)]
+$$
+
+> Point (c) is provided by the identity $\nabla \ln g(\eta) = \frac{1}{g(\eta)}\nabla g(\eta)$ (chain rule). 
+
+We will use this result later on. Now suppose to have $N$ i.i.d. observations drawn from the exponential distribution $X = \{ x_1, \dots, x_N \}$. The likelihood function is given by:
+
+$$
+p(X \mid \eta ) = (\prod_{n=1}^N h(x_n)) g(\eta)^N \exp\bigg\{ \eta^T \sum_{n=1}^N u(x_n) \bigg\}
+$$
+
+Setting $\nabla \ln p(X \mid \eta) = 0$ we get:
+
+[continue...]
