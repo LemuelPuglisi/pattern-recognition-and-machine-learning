@@ -372,4 +372,28 @@ $$
 
 Setting $\nabla \ln p(X \mid \eta) = 0$ we get:
 
-[continue...]
+$$
+-\nabla \ln g(\eta_{ML}) = \frac 1N \sum_{n=1}^N U(x_n)
+$$
+
+which can be solved to obtain $\eta_{ML}$. The solution depends on the data only through $\sum_n u(x_n)$, which is called the **sufficient statistic** of the exponential distribution. For $N \to \infty$ then $\eta_{ML} \to \eta$, 
+
+For each exponential distribution of the previous form, there exists a conjugate prior distribution over the parameters $\eta$ of the following form 
+
+$$
+p(\eta \mid \chi, \nu) = f(\chi, \nu) g(\eta)^{\nu} \exp\left\{ \nu\eta^T \chi \right\}
+$$
+
+Where $f(\chi, \eta)$ is a normalization coefficient, $g(\eta)$ is the same function presented in the exponential distribution, $\nu$ can be interpreted as a effective number of pseudo-observations in the prior, each of which has a value for the sufficient statistic $u(x)$ given by $\chi$. 
+
+> Again - why do we need conjugate priors??
+>
+> A prior $p(\eta)$ which is conjugate to the likelihood $p(X \mid \eta)$ produce a posterior $p(\eta \mid X)$ that has the same functional form as the choosen prior. This allows to derive a closed-form expression for the posterior distribution (otherwise you need to compute the normalization coefficient by integration, YOU DON'T WANT TO DO THAT, RIGHT?)
+
+### Noninformative prior
+
+If we have no prior information, we want a prior with minimal influence on the inference. We call such a prior a noninformative prior. The Bayes/Laplace postulate, stated about 200 years ago says the following:
+
+> **The principle of insufficient reason**. When nothing is known about $\theta$ in advance, let the prior $\pi(\theta)$ be a uniform distribution, that is, let all possible outcomes of $\theta$ have the same probability.
+
+Problem 
