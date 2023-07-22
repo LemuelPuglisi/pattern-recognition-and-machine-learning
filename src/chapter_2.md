@@ -396,4 +396,42 @@ If we have no prior information, we want a prior with minimal influence on the i
 
 > **The principle of insufficient reason**. When nothing is known about $\theta$ in advance, let the prior $\pi(\theta)$ be a uniform distribution, that is, let all possible outcomes of $\theta$ have the same probability.
 
-Problem 
+One noninformative prior could be the uniform distribution, but there are two problems:
+
+1. If the parameter $\theta$ is unbounded, the prior distribution cannot be correctly normalized because the integral over $\lambda$ diverges. In that case, we have an **improper** prior. In pratice, improper priors are used if the posterior is proper, i.e. is correctly normalized. 
+2. The second problem is that if we perform a non-linear change of variable, then the resulting density will not be constant (recall the Jacobian multiplier).
+
+
+ ## Nonparametric Methods
+
+ The distribution we have seen are governed by parameters that are estimated from the data. This is called **parametric approach** to density modelling.
+
+In this section we talk about nonparametric approaches to density estimation (only simple frequentist methods).
+
+Consider a continuous variable $x$, the simplest way to model that distribution is to partition $N$ observations of $x$ in different bins of width $\Delta_i$ (often the same for every bin $\Delta_i = \Delta$), and then count the number $n_i$ of observation of $x$ falling in bin $i$. To turn this count into a normalized probability density:
+
+$$
+p_i = \frac{n_i}{N \Delta_i}
+$$
+
+Problems:
+
+* If we choose $\Delta$ too small, the resulting distribution will be too spiky (i.e. will show structures that are not present in the real distribution)
+* If we choose $\Delta$ too big, the resulting distribution may fail to capture the structures of the real distribution
+
+![Alt text](assets_ch2/nonparametric.png)
+
+Advantages:
+
+* Good visualization of the distribution
+* The dataset can be discarded once the histogram is built
+* Good setup if data points are arriving sequentially
+
+Disvantages:
+
+* The estimated density has discontinuities in the bin edges
+* Does not scale with dimensionality (curse of dimensionality), the amount of data needed to work in high dimensional spaces is prohibitive.
+
+Good ideas:
+
+* To estimate probability density at a particular location, we should consider the data points that lie within some local neighbourhood of that point.
