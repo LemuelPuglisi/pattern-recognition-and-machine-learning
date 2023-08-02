@@ -103,3 +103,33 @@ class ParzenWindow(Region):
     def _k(self, u):        
         return int(all([ u_n < 0.5 for u_n in u ]))
 ```
+
+### Gaussian Kernel
+
+The Parzen Estimator has discontinuities (boundaries of the cubes). A smoother kernel function is the Gaussian:
+
+$$
+p(x) = \frac1N \sum_{n=1}^N \frac{1}{\sqrt{2\pi}h^2} \exp \left\{
+    - \frac{|| x - x_n ||^2}{2h^2}
+\right\}
+$$
+
+Where $h$ now represents the standard deviation of the Gaussian components. 
+
+In general, we can use every kernel function $k(u)$ that satisfies:
+
+$$
+k(u) \ge 0 \hspace{1cm} \int k(u)du = 1
+$$
+
+## Nearest-neighbour methods
+
+A density distribution could have locations with smaller structures and location with bigger structures. KDE methods use the same $h$ parameter everywhere, and this may not be suitable for every location of the distribution.  
+
+Nearest-neighbour methods address this problem: recall the general problem of non-parametric density estimation, let's fix K and use the data to find an appropiate value for V. 
+
+We consider a small sphere centered on the point $x$ at which we wish to estimate the density $p(x)$, we allow the radius of the sphere to grow until it contains precisely $K$ data points. $V$ will be the volume of that sphere.
+
+> The model produced by kNN is not a true density model since the integral over all spaces diverges.
+
+> kNN can also be used as a classifier. An interesting property of kNN with $K=1$ is that in the limit $N \to \infty$, the error rate is never more than twice the minimum achievable error rate of an optimal classifier.
