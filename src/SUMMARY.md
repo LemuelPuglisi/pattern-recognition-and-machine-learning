@@ -5,3 +5,4 @@
 - [Chapter 2 - Probability Distributions](./chapter_2.md)
   - [Chapter 2 - Kernel Density Estimators](./chapter_2_kde.md)
   - [Exercises](./chapter_2_exercises.md)
+- [Chapter 3 - Linear Models for Regression](./chapter_3.md)
