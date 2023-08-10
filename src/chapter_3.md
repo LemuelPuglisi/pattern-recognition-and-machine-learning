@@ -65,6 +65,84 @@ Where $\sigma$ is the logistic function, but we can also use the tanh function.
 
 > We can use also Fourier basis functions such that the the regression function is an expansion of sinusoidal functions at a certain frequency. Combining basis functions localized in both space and frequency leads to a class of functions known as wavelets.
 
+## Maximum likelihood and least squares
+
+Let $y$ be a deterministic function such that $y(x) \approx t$, let $\epsilon \sim \mathcal N(\epsilon \mid 0, \beta^{-1})$ be a random Gaussian variable with precision $\beta$. We assume that the target variable $t$ is given by:
+
+$$
+t = y(x, w) + \epsilon
+$$
+
+The conditional distribution of $t$ will then be 
+
+$$
+p(t \mid x) = \mathcal{N}(t \mid y(x,w), \beta^{-1})
+$$
+
+For a new value $x$, the optimal prediction of $t$ is given by the conditional mean:
+
+$$
+\mathbb{E}[t \mid x] = \int t p(t \mid x)dt = y(x, w)
+$$
+
+For a dataset $X = \{ (x_n, t_n)\}_{n=1}^{N}$, let $T = [t_1, \dots, t_N]^T$, assuming that $y(x, w)$ is given by a linear model $y(x, w) = w^t \phi(x)$, then the likelihood of the target variables is given by:
+
+$$
+p(T \mid X, w, \beta) = \prod_{n=1}^{N} \mathcal{N}(t_n \mid w^T\phi(x_n), \beta^{-1}
+$$
+
+The log-likelihood is:
+
+$$
+\ln p(T \mid X, w, \beta) = \frac{N}{2}\ln \beta - \frac{N}{2}\ln (2\pi) - \beta E_D(w) 
+$$
+
+Where $E_D$ is the sum-of-squares error function:
+
+$$
+E_D(w) = \frac12\sum_{n=1}^N (t_n - w^T\phi(x_n))^2
+$$
+
+We now estimate the parameters $\beta, w$ by maximum likelihood. The gradient w.r.t. to $w$ is:
+
+$$
+\nabla \ln p(T \mid X, w, \beta) = \sum_{n=1}^N (t_n - w^T\phi(x_n))\phi(x_n)^T
+$$
+
+By setting the gradient to 0 and solving for $w$ we find:
+
+$$
+w_{ML} = (\Phi^T \Phi)^{-1} \Phi^T T
+$$
+
+which are known as the **normal equations** for the least squares problem. Here $\Phi$ is a NxM matrix called **design matrix** whose elements are given by $\Phi_{nj} = \phi_j(x_n)$.
+
+The quantity 
+
+$$
+\Phi^\dagger = (\Phi^T \Phi)^{-1} \Phi^T
+$$
+
+Is known as Moore-Penrose pseudo-inverse of the matrix $\Phi$, which is a generalization of the inverse for nonsquare matrices.
+
+If we solve for the bias parameter $w_0$, the solution suggests that the bias compensates for the difference between the averages (over the training set) of the target values and the weighted sum of the averages of the basis function values.
+
+Maximizing for the precision parameter we get:
+
+$$
+\frac{1}{\beta_{ML}} = \frac1N \sum_{n=1}^N \{ t_n - w_{ML}^T \phi(x_n) \}^2
+$$
+
+which is basically the precision of the residuals.
+
+
+
+
+
+
+
+
+
 
 
 
