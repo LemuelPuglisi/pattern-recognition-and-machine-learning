@@ -135,6 +135,18 @@ $$
 
 which is basically the precision of the residuals.
 
+## Geometric interpretation of least square solution
+
+Consider an N-dimensional space. Let $\mathbb t $ be a vector in that space, where the N components are the ground truth target variables for all the N observations we are trying to predict. 
+
+Build a vector $\mathbb{t} = [t_1, \dots, t_N]^T$ made of the target variables of our dataset made of N observation. This vector lives in a N-dimensional space.
+
+The input variable $x$ is D-dimensional, while we use the basis functions $\phi(x)$ that are M-dimensional. Consider each component of the basis function evaluated on all the N observations of our dataset, we have $M$ vectors in the N-dimensional space which span a subregion S of dimension $M$. 
+
+The target value is predicted by combining the basis function output using some weights $w$, and therefore the N-dimensional vectore $\mathbb y$ made of the predicted target value for each observation in the dataset is indeed a linear combination of the $M$ vectors, and resides inside the subregion $S$. 
+
+The book demonstrates how the solution $\mathbb y$ from the least square problem corresponds to the orthogonal projection of $\mathbb t$ to the closest M-dimensional subregion S.
+
 
 
 
