@@ -148,6 +148,17 @@ The target value is predicted by combining the basis function output using some 
 The book demonstrates how the solution $\mathbb y$ from the least square problem corresponds to the orthogonal projection of $\mathbb t$ to the closest M-dimensional subregion S.
 
 
+## Sequential Least Squares
+
+Authors suggest to use gradient descent to get the least square solution sequentially (one observation at the time). Given the sum-of-squares loss, the update of the weights $w$ is 
+$$
+w^{(\tau + 1)} = w^{\tau} + \eta \bigg[ (t_n - w^{(\tau)T}\phi(x_n)) \phi(x_n)  \bigg]
+$$
+
+
+
+
+
 
 
 
