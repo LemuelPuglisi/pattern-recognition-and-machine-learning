@@ -155,7 +155,17 @@ $$
 w^{(\tau + 1)} = w^{\tau} + \eta \bigg[ (t_n - w^{(\tau)T}\phi(x_n)) \phi(x_n)  \bigg]
 $$
 
+## Regularized least squares
 
+Adding a regularization term to the loss function helps avoiding overfitting to the data. The most famous regularization term for least squares is weight decay, where the optimization process is forced to produce small weights unless supported by the data. The general form of weight decay is:
+$$
+\frac\lambda2 \sum_{j=1}^M |w_j|^q
+$$
+For $q=2$ we have the classic **quadratic regularizer**. For $q=1$ we have the **Lasso regularizer** which has the property (for $\lambda$ sufficiently large) of driving some of the weights to zero, leading to a sparse model. This is useful to avoid overfitting when we have a small dataset, even if the problem becomes to find the suitable $\lambda$. 
+
+## Multiple outputs
+
+Given a regression problem with a multivariate output, the book demonstrates how the solution decouples between the different target variables (they all share the same pseudo-inverse matrix $\Phi^\dagger$ assuming that the target variables are distributed by an isotropic gaussian). Most of the time, we can work with a single variable and easily generalize to the multivariate case.
 
 
 
