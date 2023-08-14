@@ -167,6 +167,58 @@ For $q=2$ we have the classic **quadratic regularizer**. For $q=1$ we have the *
 
 Given a regression problem with a multivariate output, the book demonstrates how the solution decouples between the different target variables (they all share the same pseudo-inverse matrix $\Phi^\dagger$ assuming that the target variables are distributed by an isotropic gaussian). Most of the time, we can work with a single variable and easily generalize to the multivariate case.
 
+## Bias-variance decomposition
+
+}{Suppose we want to find a function $y$ that approximates the target value $y(x) \approx t$ on the input $x$. We model the relation between the input $x$ and the target value $t$ as 
+$$
+t = f(x) + \epsilon \hspace{1cm} \epsilon \sim \mathcal N(0, \sigma)
+$$
+We assume that $t$ has random noise, so it's a random variable distributed by
+$$
+t \sim \mathcal N(y(x), \sigma)
+$$
+We want to find $y= f$.  Let $L(t, y(x))$ be a loss function that measures the prediction error, then the average loss is:
+$$
+\mathbb{E}[L] = \iint L(t, y(x)) \cdot p(x, t) dx dt
+$$
+If the loss is the MSE, then we have:
+$$
+\begin{split}
+\mathbb{E}[L] &= \iint [y(x) - t]^2 \cdot p(x, t) dx dt \\
+&= \underbrace{\int [y(x) - \mathbb{E}[t \mid x]] p(x)dx}_{\text{depends on y}} + 
+\underbrace{\int [\mathbb{E}[t \mid x] - t] p(x)dx}_{\text{depends on data}} 
+\end{split}
+$$
+
+> $\mathbb{E}[t \mid x]$ is the expected value of $t$, which is now considered a random variable since we assume it contains random noise. The conditioning on $x$ reflects the fact that the Gaussian distribution is centered at $f(x)$, which depends on $x$.
+
+* The first term depends on $y$ and can be reduced to zero with an unlimited amount of data.
+* The second term depends on the noise $\epsilon$ in the data, so it can't be changed by acting on $y$, so it is the minimum achievable value of expected loss.   
+
+Now let's consider K different datasets drawn indipendently from the same distribution $p(x,t)$. We estimate a different function $y$ for each dataset, since they all contain random noise. We can define $\mathbb{E}_D[y(x; D)]$ as
+$$
+\mathbb{E}_D [y(x; D)] = \frac1K \sum_D y(x; D)
+$$
+Now consider the square loss and add and subtract the term $\mathbb{E}_D[y(x; D)]$
+$$
+\{y(x;D) - \mathbb{E}[t \mid x]\}^2 = \\ 
+= \{y(x;D) - \mathbb{E}_D[y(x; D)] + \mathbb{E}_D[y(x; D)] - \mathbb{E}[t \mid x]\}^2 = \\
+= {\{y(x;D) - \mathbb{E}_D[y(x; D)]}\}^2 + \{\mathbb{E}_D[y(x; D)] - \mathbb{E}[t \mid x]\}^2
++ 2 {\{y(x;D) - \mathbb{E}_D[y(x; D)]}\}\{\mathbb{E}_D[y(x; D)] - \mathbb{E}[t \mid x]\}
+$$
+If we take the expectation of this term w.r.t. the dataset $D$, then we have:
+$$
+\mathbb{E}[\{y(x;D) - \mathbb{E}[t \mid x]\}^2] = 
+\underbrace{\big\{ \mathbb{E}_D[y(x;D)] - \mathbb{E}[t \mid x] \big\}^2}_{\text{bias}^2} +
+\underbrace{\mathbb{E}_D[ \big\{y(x; D) - \mathbb{E}_D[y(x;D)]\big\}^2 ]}_{\text{variance}}
+$$
+The expected squared difference between the model predictions and the observed data can be expressed as the sum of two terms, the bias squared and the variance.
+
+* The squared bias term represents to which extent the average prediction over all datasets differs from the desired function $\mathbb E[t \mid x]$
+* The variance term measures the extent to which the solutions for individual datasets vary around their average (sensitiveness to the choice of dataset)
+
+
+
 
 
 
