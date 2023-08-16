@@ -169,7 +169,7 @@ Given a regression problem with a multivariate output, the book demonstrates how
 
 ## Bias-variance decomposition
 
-}{Suppose we want to find a function $y$ that approximates the target value $y(x) \approx t$ on the input $x$. We model the relation between the input $x$ and the target value $t$ as 
+Suppose we want to find a function $y$ that approximates the target value $y(x) \approx t$ on the input $x$. We model the relation between the input $x$ and the target value $t$ as 
 $$
 t = f(x) + \epsilon \hspace{1cm} \epsilon \sim \mathcal N(0, \sigma)
 $$
@@ -217,7 +217,22 @@ The expected squared difference between the model predictions and the observed d
 * The squared bias term represents to which extent the average prediction over all datasets differs from the desired function $\mathbb E[t \mid x]$
 * The variance term measures the extent to which the solutions for individual datasets vary around their average (sensitiveness to the choice of dataset)
 
+If we apply this observation to the expected loss value shown before, we have the following decomposition:
+$$
+\text{expected loss} = (\text{bias})^2 + \text{variance} + \text{noise}
+$$
+Where
+$$
+\begin{split}
+(\text{bias})^2 &= \int \big\{ \mathbb{E}_D[y(x;D)] - \mathbb{E}[t \mid x] \big\}^2 p(x)dx \\
+\text{variance} &= \int \mathbb{E}_D[ \big\{y(x; D) - \mathbb{E}_D[y(x;D)]\big\}^2 p(x)dx \\
+\text{noise} &= \int \big\{ \mathbb{E}[t \mid x] - t \big\}^2p(x, t) dxdt
+\end{split}
+$$
 
+> Mathematically: recall the decomposition of the loss in two terms, we took the first term and further decomposed it into squared variance + variance. The expectation we took is w.r.t. the datasets, but we need to calculate it against the input $x$. 
+
+In practice, bias-variance decomposition can be estimated numerically by replacing the expectation with averages on the observed data. The method requires to have multiple datasets, but that means that all the datasets can be merged in a single big dataset that will produce less overfitted models. Bias-variance decomposition isn't the best way to validate our models, but it's useful to understand how overfitting works. 
 
 
 
