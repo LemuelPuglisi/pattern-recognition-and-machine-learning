@@ -234,9 +234,47 @@ $$
 
 In practice, bias-variance decomposition can be estimated numerically by replacing the expectation with averages on the observed data. The method requires to have multiple datasets, but that means that all the datasets can be merged in a single big dataset that will produce less overfitted models. Bias-variance decomposition isn't the best way to validate our models, but it's useful to understand how overfitting works. 
 
+## Bayesian Linear Regression
 
+We introduce a Bayesian treatment for linear regression, which will avoid over-fitting and will lead to automatic methods of determining model complexity using training data alone.
 
+### Parameter distribution
 
+The likelihood function is the exponential of a quadratic function of the parameters $w$ (as defined previously)
+$$
+p(T \mid w) = \prod_{n=1}^N \mathcal{N}(t_n \mid w^t \phi(x_n), \beta^{-1})
+$$
+Where $T$ are all the target values in the dataset and $\beta$ is the noise precision. Therefore, the conjugate prior over $w$ is given by a Gaussian distribution of the form:
+$$
+p(w) = \mathcal{N}(w \mid m_0, S_0)
+$$
+Where $m_0 ,S_0$ are the mean and covariance. 
+
+The posterior $p(w \mid T)$ is a Gaussian distribution (we are using a conjugate prior) proportional to the likelihood and the prior. We calculate the normalization coefficient using the result from 2.116 (from PRML). 
+$$
+p(w \mid T) = \mathcal{N}(w \mid m_N, S_N)
+$$
+ Where
+$$
+m_N = S_N(S_0^{-1}m_0 + \beta \Phi^T T) \\
+S_N^{-1} = S_0^{-1} + \beta \Phi^T\Phi
+$$
+Since the posterior is a Gaussian, its mode coincides with its mean, thus the maximum posterior weight vector is simply given by $w_{map} = m_N$.
+
+**The Bayesian approach is automatically regularized**. Assume the prior to be a zero-mean isotropic Gaussian governed by a single parameter $\alpha$
+$$
+p(w \mid \alpha) = \mathcal{N}(w \mid 0, \alpha^{-1}I)
+$$
+The parameters of the posterior distribution will then be given by:
+$$
+m_N = \beta S_N \Phi^T T \hspace{1cm}
+S_N^{-1} = \alpha I + \beta \Phi^T \Phi
+$$
+The log of the posterior distribution is given by:
+$$
+\ln p(w \mid T) = -\frac\beta2 \sum_{n=1}^N \{t_n - w^T \phi(x_n)\}^2 - \frac\alpha2 w^tw + \text{const}
+$$
+The maximization of the posterior is equivalent to the minimization of the sum of squares with the addition of a quadratic regularization term with $\lambda = \alpha / \beta$. 
 
 
 
