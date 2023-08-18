@@ -276,6 +276,30 @@ $$
 $$
 The maximization of the posterior is equivalent to the minimization of the sum of squares with the addition of a quadratic regularization term with $\lambda = \alpha / \beta$. 
 
+### Predictive distribution
+
+Once we have the posterior distribution over the weights $w$, how do we estimate the target value $t$ for a new point $x$? We use the **predictive distribution**.
+$$
+\underbrace{p(t)}_{\text{predictive}} = \int \underbrace{ p(t \mid w) }_{\text{target}} \underbrace{p(w)}_{\text{posterior}} dw
+$$
+Where we recall that:
+$$
+\begin{split}
+p(t \mid w) &= p(t \mid x, w, \beta) = \mathcal{N}(t \mid y(x,w), \beta^{-1})\\
+p(w) &= p(w \mid T) = \mathcal{N}(w \mid m_N, S_N)
+\end{split}
+$$
+The solution to this integrale is explained in (2.115). We have
+$$
+p(t) = \mathcal{N}(t \mid m_N^T \phi(x), \sigma_N^2(x))
+$$
+where the variance
+$$
+\sigma_N^2(x) = \underbrace{\frac1\beta}_{\text{noise}} + \underbrace{\phi(x)^TS_N\phi(x)}_{\text{uncertainty}}
+$$
+Because the noise process and the distribution of $w$ are independent, the variances are additive. For $N \to \infty$, the second term goes to zero, and the variance of the predictive distr. is only given by noise in the data.
+
+The more data we have, the narrower is the predictive distribution, in fact it can be shown that $\sigma_{N+1}^2(x) \le \sigma_{N}^2(x)$ (Qazaz et al., 1997).
 
 
 
