@@ -135,9 +135,171 @@ $$
 
 which is basically the precision of the residuals.
 
+## Geometric interpretation of least square solution
+
+Consider an N-dimensional space. Let $\mathbb t $ be a vector in that space, where the N components are the ground truth target variables for all the N observations we are trying to predict. 
+
+Build a vector $\mathbb{t} = [t_1, \dots, t_N]^T$ made of the target variables of our dataset made of N observation. This vector lives in a N-dimensional space.
+
+The input variable $x$ is D-dimensional, while we use the basis functions $\phi(x)$ that are M-dimensional. Consider each component of the basis function evaluated on all the N observations of our dataset, we have $M$ vectors in the N-dimensional space which span a subregion S of dimension $M$. 
+
+The target value is predicted by combining the basis function output using some weights $w$, and therefore the N-dimensional vectore $\mathbb y$ made of the predicted target value for each observation in the dataset is indeed a linear combination of the $M$ vectors, and resides inside the subregion $S$. 
+
+The book demonstrates how the solution $\mathbb y$ from the least square problem corresponds to the orthogonal projection of $\mathbb t$ to the closest M-dimensional subregion S.
 
 
+## Sequential Least Squares
 
+Authors suggest to use gradient descent to get the least square solution sequentially (one observation at the time). Given the sum-of-squares loss, the update of the weights $w$ is 
+$$
+w^{(\tau + 1)} = w^{\tau} + \eta \bigg[ (t_n - w^{(\tau)T}\phi(x_n)) \phi(x_n)  \bigg]
+$$
+
+## Regularized least squares
+
+Adding a regularization term to the loss function helps avoiding overfitting to the data. The most famous regularization term for least squares is weight decay, where the optimization process is forced to produce small weights unless supported by the data. The general form of weight decay is:
+$$
+\frac\lambda2 \sum_{j=1}^M |w_j|^q
+$$
+For $q=2$ we have the classic **quadratic regularizer**. For $q=1$ we have the **Lasso regularizer** which has the property (for $\lambda$ sufficiently large) of driving some of the weights to zero, leading to a sparse model. This is useful to avoid overfitting when we have a small dataset, even if the problem becomes to find the suitable $\lambda$. 
+
+## Multiple outputs
+
+Given a regression problem with a multivariate output, the book demonstrates how the solution decouples between the different target variables (they all share the same pseudo-inverse matrix $\Phi^\dagger$ assuming that the target variables are distributed by an isotropic gaussian). Most of the time, we can work with a single variable and easily generalize to the multivariate case.
+
+## Bias-variance decomposition
+
+Suppose we want to find a function $y$ that approximates the target value $y(x) \approx t$ on the input $x$. We model the relation between the input $x$ and the target value $t$ as 
+$$
+t = f(x) + \epsilon \hspace{1cm} \epsilon \sim \mathcal N(0, \sigma)
+$$
+We assume that $t$ has random noise, so it's a random variable distributed by
+$$
+t \sim \mathcal N(y(x), \sigma)
+$$
+We want to find $y= f$.  Let $L(t, y(x))$ be a loss function that measures the prediction error, then the average loss is:
+$$
+\mathbb{E}[L] = \iint L(t, y(x)) \cdot p(x, t) dx dt
+$$
+If the loss is the MSE, then we have:
+$$
+\begin{split}
+\mathbb{E}[L] &= \iint [y(x) - t]^2 \cdot p(x, t) dx dt \\
+&= \underbrace{\int [y(x) - \mathbb{E}[t \mid x]] p(x)dx}_{\text{depends on y}} + 
+\underbrace{\int [\mathbb{E}[t \mid x] - t] p(x)dx}_{\text{depends on data}} 
+\end{split}
+$$
+
+> $\mathbb{E}[t \mid x]$ is the expected value of $t$, which is now considered a random variable since we assume it contains random noise. The conditioning on $x$ reflects the fact that the Gaussian distribution is centered at $f(x)$, which depends on $x$.
+
+* The first term depends on $y$ and can be reduced to zero with an unlimited amount of data.
+* The second term depends on the noise $\epsilon$ in the data, so it can't be changed by acting on $y$, so it is the minimum achievable value of expected loss.   
+
+Now let's consider K different datasets drawn indipendently from the same distribution $p(x,t)$. We estimate a different function $y$ for each dataset, since they all contain random noise. We can define $\mathbb{E}_D[y(x; D)]$ as
+$$
+\mathbb{E}_D [y(x; D)] = \frac1K \sum_D y(x; D)
+$$
+Now consider the square loss and add and subtract the term $\mathbb{E}_D[y(x; D)]$
+$$
+\{y(x;D) - \mathbb{E}[t \mid x]\}^2 = \\ 
+= \{y(x;D) - \mathbb{E}_D[y(x; D)] + \mathbb{E}_D[y(x; D)] - \mathbb{E}[t \mid x]\}^2 = \\
+= {\{y(x;D) - \mathbb{E}_D[y(x; D)]}\}^2 + \{\mathbb{E}_D[y(x; D)] - \mathbb{E}[t \mid x]\}^2
++ 2 {\{y(x;D) - \mathbb{E}_D[y(x; D)]}\}\{\mathbb{E}_D[y(x; D)] - \mathbb{E}[t \mid x]\}
+$$
+If we take the expectation of this term w.r.t. the dataset $D$, then we have:
+$$
+\mathbb{E}[\{y(x;D) - \mathbb{E}[t \mid x]\}^2] = 
+\underbrace{\big\{ \mathbb{E}_D[y(x;D)] - \mathbb{E}[t \mid x] \big\}^2}_{\text{bias}^2} +
+\underbrace{\mathbb{E}_D[ \big\{y(x; D) - \mathbb{E}_D[y(x;D)]\big\}^2 ]}_{\text{variance}}
+$$
+The expected squared difference between the model predictions and the observed data can be expressed as the sum of two terms, the bias squared and the variance.
+
+* The squared bias term represents to which extent the average prediction over all datasets differs from the desired function $\mathbb E[t \mid x]$
+* The variance term measures the extent to which the solutions for individual datasets vary around their average (sensitiveness to the choice of dataset)
+
+If we apply this observation to the expected loss value shown before, we have the following decomposition:
+$$
+\text{expected loss} = (\text{bias})^2 + \text{variance} + \text{noise}
+$$
+Where
+$$
+\begin{split}
+(\text{bias})^2 &= \int \big\{ \mathbb{E}_D[y(x;D)] - \mathbb{E}[t \mid x] \big\}^2 p(x)dx \\
+\text{variance} &= \int \mathbb{E}_D[ \big\{y(x; D) - \mathbb{E}_D[y(x;D)]\big\}^2 p(x)dx \\
+\text{noise} &= \int \big\{ \mathbb{E}[t \mid x] - t \big\}^2p(x, t) dxdt
+\end{split}
+$$
+
+> Mathematically: recall the decomposition of the loss in two terms, we took the first term and further decomposed it into squared variance + variance. The expectation we took is w.r.t. the datasets, but we need to calculate it against the input $x$. 
+
+In practice, bias-variance decomposition can be estimated numerically by replacing the expectation with averages on the observed data. The method requires to have multiple datasets, but that means that all the datasets can be merged in a single big dataset that will produce less overfitted models. Bias-variance decomposition isn't the best way to validate our models, but it's useful to understand how overfitting works. 
+
+## Bayesian Linear Regression
+
+We introduce a Bayesian treatment for linear regression, which will avoid over-fitting and will lead to automatic methods of determining model complexity using training data alone.
+
+### Parameter distribution
+
+The likelihood function is the exponential of a quadratic function of the parameters $w$ (as defined previously)
+$$
+p(T \mid w) = \prod_{n=1}^N \mathcal{N}(t_n \mid w^t \phi(x_n), \beta^{-1})
+$$
+Where $T$ are all the target values in the dataset and $\beta$ is the noise precision. Therefore, the conjugate prior over $w$ is given by a Gaussian distribution of the form:
+$$
+p(w) = \mathcal{N}(w \mid m_0, S_0)
+$$
+Where $m_0 ,S_0$ are the mean and covariance. 
+
+The posterior $p(w \mid T)$ is a Gaussian distribution (we are using a conjugate prior) proportional to the likelihood and the prior. We calculate the normalization coefficient using the result from 2.116 (from PRML). 
+$$
+p(w \mid T) = \mathcal{N}(w \mid m_N, S_N)
+$$
+ Where
+$$
+m_N = S_N(S_0^{-1}m_0 + \beta \Phi^T T) \\
+S_N^{-1} = S_0^{-1} + \beta \Phi^T\Phi
+$$
+Since the posterior is a Gaussian, its mode coincides with its mean, thus the maximum posterior weight vector is simply given by $w_{map} = m_N$.
+
+**The Bayesian approach is automatically regularized**. Assume the prior to be a zero-mean isotropic Gaussian governed by a single parameter $\alpha$
+$$
+p(w \mid \alpha) = \mathcal{N}(w \mid 0, \alpha^{-1}I)
+$$
+The parameters of the posterior distribution will then be given by:
+$$
+m_N = \beta S_N \Phi^T T \hspace{1cm}
+S_N^{-1} = \alpha I + \beta \Phi^T \Phi
+$$
+The log of the posterior distribution is given by:
+$$
+\ln p(w \mid T) = -\frac\beta2 \sum_{n=1}^N \{t_n - w^T \phi(x_n)\}^2 - \frac\alpha2 w^tw + \text{const}
+$$
+The maximization of the posterior is equivalent to the minimization of the sum of squares with the addition of a quadratic regularization term with $\lambda = \alpha / \beta$. 
+
+### Predictive distribution
+
+Once we have the posterior distribution over the weights $w$, how do we estimate the target value $t$ for a new point $x$? We use the **predictive distribution**.
+$$
+\underbrace{p(t)}_{\text{predictive}} = \int \underbrace{ p(t \mid w) }_{\text{target}} \underbrace{p(w)}_{\text{posterior}} dw
+$$
+Where we recall that:
+$$
+\begin{split}
+p(t \mid w) &= p(t \mid x, w, \beta) = \mathcal{N}(t \mid y(x,w), \beta^{-1})\\
+p(w) &= p(w \mid T) = \mathcal{N}(w \mid m_N, S_N)
+\end{split}
+$$
+The solution to this integrale is explained in (2.115). We have
+$$
+p(t) = \mathcal{N}(t \mid m_N^T \phi(x), \sigma_N^2(x))
+$$
+where the variance
+$$
+\sigma_N^2(x) = \underbrace{\frac1\beta}_{\text{noise}} + \underbrace{\phi(x)^TS_N\phi(x)}_{\text{uncertainty}}
+$$
+Because the noise process and the distribution of $w$ are independent, the variances are additive. For $N \to \infty$, the second term goes to zero, and the variance of the predictive distr. is only given by noise in the data.
+
+The more data we have, the narrower is the predictive distribution, in fact it can be shown that $\sigma_{N+1}^2(x) \le \sigma_{N}^2(x)$ (Qazaz et al., 1997).
 
 
 
