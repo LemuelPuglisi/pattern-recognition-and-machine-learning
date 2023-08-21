@@ -301,6 +301,26 @@ Because the noise process and the distribution of $w$ are independent, the varia
 
 The more data we have, the narrower is the predictive distribution, in fact it can be shown that $\sigma_{N+1}^2(x) \le \sigma_{N}^2(x)$ (Qazaz et al., 1997).
 
+### Equivalent kernel
+
+To perform inference using the predictive distribution, we return the mean value, which can be written in the form:
+$$
+\begin{split}
+y(x,m_N) &= m_N^T\phi(x) \\
+&= \beta \phi(x)^T S_n \Phi^T T
+= \sum_{n=1}^N \beta \phi(x)^T S_n \phi(x_n) t_n
+\end{split}
+$$
+The mean of the predictive distribution is a linear combination of the target variables $t_n$ from the training set:
+$$
+y(x, m_N) = \sum_{n=1}^N k(x,x_n) t_n \hspace{1cm} k(x,x_n)= \beta \phi(x)^T S_n \phi(x_n)
+$$
+Where $k(x,x')$ is called **smoother matrix** or **equivalent kernel**. Regression functions that make inference by taking linear combination of the training target values are called **linear smoothers**. Such kernels have a localization property that increase the response if $x$ and $x'$ are closer.
+
+An alternative approach of linear regression is to directly compute an equivalent kernel instead of working with the basis functions. This leads to the Gaussian processes.
+
+Some properties of the kernels are that (1) the weights sum to one $\sum_{n=1}^N k(x,x_n)=1$ and (2) the function can be expressed as an inner product $k(x,z)=\psi(x)^T\psi(z)$ where $\psi$ is a non linear function. 
+
 
 
 
