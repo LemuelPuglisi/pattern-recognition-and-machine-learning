@@ -289,7 +289,7 @@ p(t \mid w) &= p(t \mid x, w, \beta) = \mathcal{N}(t \mid y(x,w), \beta^{-1})\\
 p(w) &= p(w \mid T) = \mathcal{N}(w \mid m_N, S_N)
 \end{split}
 $$
-The solution to this integrale is explained in (2.115). We have
+The solution to this integral is explained in (2.115). We have
 $$
 p(t) = \mathcal{N}(t \mid m_N^T \phi(x), \sigma_N^2(x))
 $$
@@ -322,10 +322,44 @@ An alternative approach of linear regression is to directly compute an equivalen
 Some properties of the kernels are that (1) the weights sum to one $\sum_{n=1}^N k(x,x_n)=1$ and (2) the function can be expressed as an inner product $k(x,z)=\psi(x)^T\psi(z)$ where $\psi$ is a non linear function. 
 
 
+## Bayesian Model Comparison
+
+Suppose we want to compare $L$ models $M_1, \dots, M_L$, where a model represents a different probability distribution over the observed data $D$. The uncertainty of the model is expressed by a prior distribution $p(M_i)$ (we can assume to be uniform). Given the dataset $D$, we want to evaluate the posterior distribution:
+
+$$
+p(M_i \mid D) \propto p(D \mid M_i)p(M_i)
+$$
+
+$P(D \mid M_i)$ is called **model evidence** or **marginal likelihood**, since it can be viewed as a likelihood function over the space of models, in which the parameters have been marginalized out.
 
 
+> The ratio of model evidences $p(D \mid M_i) / p(D \mid M_j)$ is called **Bayes factor**.
+
+Given the posterior $p(M_i \mid D)$, the predictive distribution is given by the sum and product rule:
+
+$$
+\begin{split}
+p(t \mid x, D) &= \sum_{i=1}^L p(t, M_i \mid x, D) \\
+&= \sum_{i=1}^L p(t \mid x, D, M_i) p(M_i \mid x, D) \\
+&= \sum_{i=1}^L p(t \mid x, D, M_i) p(M_i \mid D) \\
+\end{split}
+$$
+
+This is an example of a **mixture distribution**, obtained by averaging the predictive distributions of individual models weighted by the posterior probabilities of those models.
 
 
+> An approximation of model averaging is to use the most probable model alone to make predictions. This is called **model selection**.
+
+Now we focus on the model evidence / marginal likelihood. For a model $M_i$ governed by parameters $w$, the evidence is:
+
+$$
+p(D \mid M_i) = \int p(D \mid w, M_i) p(w \mid M_i) dw
+$$
+
+1. The evidence can be viewed as the probability of generating $D$ from $M_i$ by randomly sampling $w \sim p(w \mid M_i)$.
+2. The evidence appears as the normalization coefficient in the posterior $p(w \mid D)$
+
+p. 182
 
 
 
