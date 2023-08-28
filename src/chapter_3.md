@@ -359,8 +359,12 @@ $$
 1. The evidence can be viewed as the probability of generating $D$ from $M_i$ by randomly sampling $w \sim p(w \mid M_i)$.
 2. The evidence appears as the normalization coefficient in the posterior $p(w \mid D)$
 
-p. 182
-
-
-
-
+**Bayesian model complexity.** The evidence is useful to evaluate the complexity of the model. Let's approximate the integral above by (i) assuming the posterior $p(D \mid w)$ is peaked at most probable $w_{MAP}$ with a width of $\Delta_{posterior}$, and the prior is flat with width $\Delta_{prior}$. In this case, the integral can be approximated by:
+$$
+P(D) = P(D \mid w_{MAP}) \frac{\Delta_{posterior}}{\Delta_{prior}}
+$$
+If we take the logs:
+$$
+\log P(D) = \log P(D \mid w_{MAP}) + \log{\frac{\Delta_{posterior}}{\Delta_{prior}}}
+$$
+If the model complexity increases, then $\log P(D \mid w_{MAP})$ increases because it better fits the data, but $\log{\frac{\Delta_{posterior}}{\Delta_{prior}}}$ decreases, because $\Delta_{posterior}$ becomes smaller and the ratio approaches 0. In general, the Bayesian approach favours the best trade-off between accuracy and complexity.
