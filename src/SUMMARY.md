@@ -6,3 +6,4 @@
   - [Chapter 2 - Kernel Density Estimators](./chapter_2_kde.md)
   - [Exercises](./chapter_2_exercises.md)
 - [Chapter 3 - Linear Models for Regression](./chapter_3.md)
+  - [Chapter 3 - Evidence Approximation](./chapter_3_evidence_approx.md)

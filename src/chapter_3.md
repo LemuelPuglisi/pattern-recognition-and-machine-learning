@@ -358,9 +358,3 @@ $$
 
 1. The evidence can be viewed as the probability of generating $D$ from $M_i$ by randomly sampling $w \sim p(w \mid M_i)$.
 2. The evidence appears as the normalization coefficient in the posterior $p(w \mid D)$
-
-p. 182
-
-
-
-
