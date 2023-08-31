@@ -9,7 +9,7 @@ $$
 p(t \mid T) \int\int\int p(t \mid w,\beta) p(w\mid T, \alpha, \beta) p(\alpha, \beta \mid T) \space dw\space d\alpha\space d\beta
 $$
 
-Where $p(t \mid w, \beta)$ is a likelihood function (given by 3.8)$ and $p(w \mid T, \alpha, \beta)$ is the posterior (the Gaussian with mean $m_N$ and covariance matrix $S_N$) and $p(\alpha, \beta \mid T)$ is a posterior for the hyperparameters.
+Where $p(t \mid w, \beta)$ is a likelihood function (given by 3.8) and $p(w \mid T, \alpha, \beta)$ is the posterior (the Gaussian with mean $m_N$ and covariance matrix $S_N$) and $p(\alpha, \beta \mid T)$ is a posterior for the hyperparameters.
 
 An approximation, called **Empirical Bayes**, is given by:
 1. Obtaining the marginal likelihood by integrating over $w$
