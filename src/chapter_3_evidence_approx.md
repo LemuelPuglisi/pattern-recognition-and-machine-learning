@@ -27,7 +27,7 @@ $$
 p(\alpha, \beta \mid T) \propto p(T \mid \alpha, \beta) p(\alpha, \beta)
 $$
 
-If the prior $p(\alpha, \beta)$ is relatively flat, then $\hat \alpha, \hat \beta$ can be obtained by maximizing the likelihood $p(T \mid \alpha, \beta)$ instead of the posterior $p(\alpha, \beta \mid T)$. 
+If the prior $p(\alpha, \beta)$ is relatively flat, then $\hat \alpha, \hat \beta$ can be obtained by maximizing the likelihood $p(T \mid \alpha, \beta)$ instead of the posterior $p(\alpha, \beta \mid T)$.
 
 
 But how do we compute the likelihood $p(T \mid \alpha, \beta)$? Let's marginalize over $w$:
@@ -40,7 +40,7 @@ p(T \mid \alpha, \beta) &= \int p(T \mid w, \beta)p(w \mid \alpha) \space dw\\
 \end{split}
 $$
 
-where 
+where
 
 $$
 \begin{split}
@@ -53,10 +53,51 @@ If you want to know the intermediate calculation denoted by $\vdots$, read the c
 
 ![calcs](./assets_ch3/derivation_of_3-78.png)
 
+After this, the book does a **little bit of magic**. It defines:
 
+1. $A = \alpha I + \beta \Phi^T \Phi$ which is also $A=\nabla\nabla E(w)$ (hessian of $E$)
+2. $E(m_N) = \frac\beta2 || T - \phi m_N ||^2 + \frac\alpha2 m_N^T m_N$
+3. $m_N = \beta A^{-1} \Phi^T T$
 
+And then derives:
 
+$$
+E(w) = E(m_N) + \frac12(w-m_N)^T A (w-m_N)
+$$
 
+The steps are depicted in the online exercises solutions provided by the author:
+
+![steps](./assets_ch3/derivation-of-3-80.png)
+
+There is a connection between this and the posterior distribution $p(w \mid T)$ as we can see $m_N$ and $S_N^{-1} = A$.
+
+We can now solve the integral inside the likelihood function $p(T \mid \alpha, \beta)$:
+
+$$
+\begin{split}
+&\int \exp\{ -E(w) \} \space dw \\
+&= \exp\{-E(m_N)\} \int \exp \left\{ -\frac12(w-m_N)^T A (w-m_N) \right\} \space dw \\
+&= \exp\{-E(m_N)\} (2\pi)^{M/2} |A|^{-1/2}
+\end{split}
+$$
+
+Now we can replace in the likelihood formula:
+
+$$
+\begin{split}
+p(T \mid \alpha, \beta) &= \int p(T \mid w, \beta)p(w \mid \alpha) \space dw\\
+&= \left(\frac{\beta}{2\pi}\right)^{N/2} \left(\frac{\alpha}{2\pi}\right)^{M/2} \int \exp \{ -E(w) \} \space dw \\
+&= \left(\frac{\beta}{2\pi}\right)^{N/2} \left(\frac{\alpha}{2\pi}\right)^{M/2} \exp\{-E(m_N)\} (2\pi)^{M/2} |A|^{-1/2}
+\end{split}
+$$
+
+And we can also calculate the log likelihood:
+
+$$
+\ln p(T \mid \alpha,\beta) = \frac M2 \ln \alpha + \frac N2 \ln \beta - E(m_N) - \frac 12 \ln |A| - \frac N2 \ln(2\pi)
+$$
+
+The book does an example with the polynomials as basis functions and shows how the likelihood prefers a trade-off between model accuracy and complexity, with lower values for high order polynomials. 
 
 
 
