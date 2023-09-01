@@ -99,5 +99,21 @@ $$
 
 The book does an example with the polynomials as basis functions and shows how the likelihood prefers a trade-off between model accuracy and complexity, with lower values for high order polynomials. 
 
+## Finding the hyperparameters
+
+Now that we have obtained the likelihood expression $p(T \mid \alpha,\beta)$, we want to maximize it for $\alpha$ and $\beta$.
+
+### Maximizing for $\alpha$
+
+When we derive $p(T \mid \alpha, \beta)$ w.r.t. $\alpha$ we only have to look at the term $\ln |A|$ ([click for more info](https://stats.stackexchange.com/questions/395587/pattern-recognition-and-machine-learning-bishop-how-is-this-log-evidence-fun)).  The eigenvalues of matrix $A$ have the form $\alpha + \lambda_i$ with $i=1\dots  M$. The derivative is:
+$$
+\begin{split}
+\frac{\partial}{\partial \alpha} \ln |A| &= \frac{\partial}{\partial \alpha} \ln \prod_{i=1}^M (\lambda_i + \alpha) \\
+&= \frac{\partial}{\partial \alpha} \sum_{i=1}^M \ln (\lambda_i + \alpha) \\
+
+&= \sum_{i=1}^M \frac{1}{\lambda_i+\alpha}
+\end{split}
+$$
+
 
 
