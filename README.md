@@ -24,7 +24,7 @@
 | ----------------------------------- | ---- | --------- |
 | 1. Introduction                     |  💥  |   7/41    |
 | 2. Probability Distributions        |  💥  |   3/61   |
-| 3. Linear Models for Regression     |      |           |
+| 3. Linear Models for Regression     |  💥  |   0/24    |
 | 4. Linear Models for Classification |      |           |
 | 5. Neural Networks                  |      |           |
 | 6. Kernel Methods                   |      |           |
