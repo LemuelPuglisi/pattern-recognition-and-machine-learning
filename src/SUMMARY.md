@@ -7,3 +7,4 @@
   - [Exercises](./chapter_2_exercises.md)
 - [Chapter 3 - Linear Models for Regression](./chapter_3.md)
   - [Chapter 3 - Evidence Approximation](./chapter_3_evidence_approx.md)
+- [Chapter 4 - Linear Models for Classification](./chapter_4.md)
