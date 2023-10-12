@@ -158,4 +158,93 @@ If the within-class variance is isotropic, so that $S_W$ is proportional to the 
 
 The projection function $y(x)=w^Tx$ is not really a discriminant, but we can construct a discriminant by choosing a threshold $y_0$ to classify the points.
 
+### Relation to least squares
+
+*For the two class problem, the Fisher criterion can be obtained as a special case of least squares.* 
+
+Let $N$ be the total number of observations, $N_1$ the observations from $C_1$ class, and $N_2$ from $C_2$ class. Reparameterize the target values as:
+
+1. $t_n = N / N_1$ if $x_n \in C_1$ 
+2. $t_n = - N / N_2$ if $x_n \in C_2$  
+
+Write the sum of squares error function:
+
+$$
+E = \frac12 \sum_{n=1}^N \bigg[ (w^T x_n + w_0)  - t_n \bigg]^2
+$$
+
+By setting $\partial E / \partial w_0 = 0$ and $\partial E / \partial w = 0$, after some algebraic manipulations, we find:
+
+$$
+w \propto S_W^{-1}(m_2 - m_1) \hspace{1cm}
+w_0 = -w^T m
+$$
+
+where $w$ corresponds to the solution for the Fisher criteria, and we have also obtained an expression for the threshold $w_0$, where $m$ is the mean of all the observation. For intermediate steps, check page 210.
+
+
+### Fisher discriminant for multiple classes
+
+Suppose $K > 2$ classes. Let $x_n \in \R^D$, where $D > K$. We need to project the observation $x_n$ to $y_n \in \R^{D'}$, and we can calculate each component $y_n^{(k)}$ as follows
+
+$$
+y_n^{(k)} = w_k^T x_n
+$$
+
+Where $w_k \in R^D$. We can group $w_k$ for $k=1, \dots, D'$ as columns of a matrix $W$ of dimension $D \times D'$, and calculate the $y_n$ vector in one step as:
+
+$$
+y_n = W^T x_n
+$$
+
+Let's define the within and between class covariances for the multi-class problem. 
+
+The within class covariance $S_W$ is:
+
+$$
+S_W = \sum_{k=1}^K S_k  \hspace{1cm}
+S_k = \sum_{n \in C_k} (x_n - m_k)(x_n - m_k)^T \hspace{1cm}
+m_k = \frac1{N_k}\sum_{n \in C_k} x_n
+$$
+
+The between class covariance $S_B$ is:
+
+$$
+S_B = \sum_{k=1}^K N_k(m_k - m)(m_k - m)^T \hspace{1cm}
+m = \frac1N\sum_{n=1}^N x_n
+$$
+
+Now let's define the covariances but in the projected space of $y_n$.
+
+The within class covariance $S_W$ is:
+
+$$
+s_W = \sum_{k=1}^K \sum_{n \in C_k} (y - \mu_k)(y - \mu_k)^T   \hspace{1cm}
+\mu_k = \frac1{N_k}\sum_{n \in C_k} y_n
+$$
+
+The between class covariance $S_B$ is:
+
+$$
+s_B = \sum_{k=1}^K N_k(\mu_k - \mu)(\mu_k - \mu)^T \hspace{1cm}
+\mu = \frac1N\sum_{n=1}^N y_n
+$$
+
+There exist different objective functions to maximize, but here we use the one from (Fukunaga, 1990), which is:
+
+$$
+J(W) = \text{Tr}(s_W^{-1}s_B)
+$$
+
+Rewriting with explicit dependence on $W$:
+
+$$
+J(W) = \text{Tr}\left( (WS_WW)^{-1}(WS_BW) \right)
+$$
+
+**Solution**: the columns of the matrix $W$ that maximizes $J(W)$ are the D' eigenvectors of the D' largest eigenvalues of the matrix $S_W^{-1}S_B$.
+
+**Observation**: Since the matrix resulting from an outer product of non-zero vector [has always a rank of 1](https://en.wikipedia.org/wiki/Outer_product#:~:text=additional%20associativity%20property%3A-,Rank%20of%20an%20outer%20product,matrix%20is%20of%20rank%20one.), since $S_B$ is composed by the sum of $K$ rank-1 matrices and since only $K-1$ of these matrices are independent, then $S_B$ as a rank at most equal to $K-1$, and therefore there are at most $K-1$ non-zero eigenvalues. This means that we are unable to find more than $K-1$ linear features by this method (Fukunaga, 1990).
+
+> Right now we have only reduced the dimensionality of the data. Where is the discriminant function?
 
