@@ -248,3 +248,6 @@ $$
 
 > Right now we have only reduced the dimensionality of the data. Where is the discriminant function?
 
+## 4.1.7 Perceptron
+
+Find my notes about Perceptron [here](https://lemuelpuglisi.github.io/DIDM.web/3_Classificazione.html#43-perceptron) (in italian).
