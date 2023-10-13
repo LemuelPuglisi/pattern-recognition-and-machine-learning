@@ -251,3 +251,50 @@ $$
 ## 4.1.7 Perceptron
 
 Find my notes about Perceptron [here](https://lemuelpuglisi.github.io/DIDM.web/3_Classificazione.html#43-perceptron) (in italian).
+
+
+## 4.2 Probabilistic Generative Models
+
+Consider the binary classification task. We want to compute the posterior probability $p(x \mid C_1)$:
+
+$$
+\begin{split}
+p(C_1 \mid x) &= \frac{p(x \mid C_1) p(C_1)}{p(x \mid C_1) p(C_1) + p(x \mid C_2) p(C_2)} \\
+
+&= \frac{1}{\frac{p(x \mid C_1) p(C_1) + p(x \mid C_2) p(C_2)}{p(x \mid C_1) p(C_1)}} \\
+
+&= \frac{1}{1 + \frac{p(x \mid C_2) p(C_2)}{p(x \mid C_1) p(C_1)}} \\
+
+&= \frac{1}{1 +\exp\left[ \ln \frac{p(x \mid C_2) p(C_2)}{p(x \mid C_1) p(C_1)} \right]} \\
+
+&= \frac{1}{1 +\exp\left[ - \ln \frac{p(x \mid C_1) p(C_1)}{p(x \mid C_2) p(C_2)} \right]} \\
+
+&= \frac{1}{1 +\exp(- a)} = \sigma(a)\\
+
+\end{split}
+$$
+
+Where $\sigma(a)$ is the sigmoid function, which has the property $\sigma(-a) = 1 - \sigma(a)$.
+
+The inverse of the logistic sigmoid is given by the logit function:
+
+$$
+a = \ln \left( \frac{\sigma}{1-\sigma} \right)
+$$
+
+It represents the log of the ratio of probabilities $\ln[p(C_1 \mid x)/p(C_2 \mid x)]$ for the two classes. 
+
+For $K > 2$ classes, we have:
+
+$$
+p(C_k \mid x) = \frac{p(x \mid C_k) p(C_k)}{\sum_j p(x \mid C_j)p(C_j)} 
+= \frac{\exp(a_k)}{\sum_j exp(a_j)}
+$$
+
+where the quantities $a_k$ are defined as:
+
+$$
+a_k = \ln p(x \mid C_k) p(C_k)
+$$
+
+This function, called normalized exponential, is also known as the softmax function.
