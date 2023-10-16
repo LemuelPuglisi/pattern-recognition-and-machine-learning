@@ -298,3 +298,48 @@ a_k = \ln p(x \mid C_k) p(C_k)
 $$
 
 This function, called normalized exponential, is also known as the softmax function.
+
+### Continuous inputs
+
+Assume that 
+
+* $x$ is continuous 
+* Class conditional densities are Gaussian
+* They share the same covariance matrix $\Sigma$
+
+$$
+p(x \mid C_k) = \mathcal{N}(\mu_k, \Sigma)
+$$
+
+Consider the binary classification task. From the results above, we have:
+
+$$
+p(C_1 \mid x) = \sigma(w^T x + w_0)
+$$
+
+Where:
+
+$$
+w = \Sigma^{-1} (\mu_1 - \mu_2) \hspace{1cm}
+w_0 = -\frac12\mu_1^T\Sigma\mu_1 +\frac12\mu_2^T\Sigma\mu_2 + \ln\frac{p(C_1)}{p(C_2)}
+$$
+
+Hence we have that the argument of the activation function is linear w.r.t. the input $x$.
+
+Since the decision boundaries are defined as the areas where $p(C_k \mid x)$ is constant, and since this depends only on the argument of the sigmoid, which is linear w.r.t. $x$, therefore the decision boundaries are also linear w.r.t. $x$. 
+
+Changing the prior probabilities will only shift the decision boundaries, since they appear only in the bias parameter $w_0$. 
+
+For $K$ classes, we have
+
+$$
+a_k(x) = w_k^T x + x_{k0}
+$$
+
+where 
+
+$$
+w_k = \Sigma^{-1}\mu_k \hspace{1cm} w_{ko} = -\frac12 \mu_k^T \Sigma^{-1} + \ln p(C_k)
+$$
+
+Relaxing the assumption of a shared covariance matrix and considering a different covariance matrix $\Sigma_k$ for each class will result in a quadratic dependency w.r.t. of $P(C_k \mid x)$ w.r.t. $x$ (also called *quadratic discriminant*).
