@@ -255,7 +255,7 @@ Find my notes about Perceptron [here](https://lemuelpuglisi.github.io/DIDM.web/3
 
 ## 4.2 Probabilistic Generative Models
 
-Consider the binary classification task. We want to compute the posterior probability $p(x \mid C_1)$:
+Consider the binary classification task. We want to compute the posterior probability $p(C_1 \mid x)$:
 
 $$
 \begin{split}
@@ -343,3 +343,14 @@ w_k = \Sigma^{-1}\mu_k \hspace{1cm} w_{ko} = -\frac12 \mu_k^T \Sigma^{-1} + \ln 
 $$
 
 Relaxing the assumption of a shared covariance matrix and considering a different covariance matrix $\Sigma_k$ for each class will result in a quadratic dependency w.r.t. of $P(C_k \mid x)$ w.r.t. $x$ (also called *quadratic discriminant*).
+
+### Maximum likelihood solutions
+
+See the derivations at page 220. Suppose we have $N$ samples $x_1, \dots, x_N$ and their binary class labels $t_1, \dots, t_N$, where $t_n \in \{0,1\}$, suppose $N_1$ samples belong to class $C_1$ and $N_2$ to class $C_2$. If we condire Gaussian class conditional densities $p(x \mid C_1) = \mathcal{N}(x \mid \mu_1, \Sigma)$ and $p(x \mid C_2) = \mathcal{N}(x \mid \mu_2, \Sigma)$ with shared covariance matrix $\Sigma$, then the maximum likelihood likelihood solutions are:
+
+* $p(C_1) = N_1/N$
+* $p(C_2) = N_2/N$
+* $\mu_1$ centroid of samples from class $C_1$
+* $\mu_2$ centroid of samples from class $C_2$
+* $\Sigma$ sum of covariance matrices of $C_1$ and $C_2$ weighted by the priors.
+
