@@ -354,3 +354,8 @@ See the derivations at page 220. Suppose we have $N$ samples $x_1, \dots, x_N$ a
 * $\mu_2$ centroid of samples from class $C_2$
 * $\Sigma$ sum of covariance matrices of $C_1$ and $C_2$ weighted by the priors.
 
+## Probabilistic Discriminative Models
+
+
+### Probit regression
+![](./assets_ch4/probit_regression.png)
